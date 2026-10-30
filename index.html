@@ -24,8 +24,8 @@
     h1, h2, .num, .primary, .summary b, .stop .name { font-family: inherit; font-weight: 700; letter-spacing: -0.01em; }
     .app { display: flex; height: 100%; }
     .sidebar { width: 410px; display: flex; flex-direction: column; background: var(--bg); z-index: 2; overflow-y: auto; padding: 14px; box-sizing: border-box; gap: 12px; box-shadow: 4px 0 18px rgba(60, 110, 80, .12); }
-    .section { background: var(--card); border-radius: var(--radius); padding: 14px 16px; box-shadow: 0 3px 0 var(--line), 0 6px 14px rgba(60, 110, 80, .08); }
-    .section.hero { background: linear-gradient(135deg, var(--peach), var(--butter)); box-shadow: 0 3px 0 #c4e3b9; }
+    .section { background: var(--card); border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--line); }
+    .section.hero { background: linear-gradient(135deg, var(--peach), var(--butter)); border-color: #cfe8c6; }
     .section h2 { font-size: 16px; margin: 0 0 10px; color: var(--coral-d); }
     h1 { font-size: 24px; margin: 0 0 4px; }
     .sub { margin: 0; font-size: 14px; color: #56786a; line-height: 1.5; }
@@ -49,7 +49,7 @@
     .places { list-style: none; margin: 0; padding: 0; }
     .places li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 2px dotted var(--line); font-size: 14px; }
     .places li:last-child { border-bottom: 0; }
-    .num { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--coral); color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 0 var(--coral-d); }
+    .num { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--coral); color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; }
     .grow { flex: 1; min-width: 0; }
     .grow .n { font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .grow .a { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -170,6 +170,36 @@
     .hm-name .t { overflow: hidden; text-overflow: ellipsis; }
     .hm:hover { z-index: 9999 !important; }
     .hm:hover .hm-name { max-width: none; }
+    .day-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .day-tabs button { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; padding: 6px 14px; font-family: inherit; font-size: 13px; cursor: pointer; }
+    .day-tabs button.on { background: var(--coral); border-color: var(--coral); color: #fff; font-weight: 700; }
+    .day-view { margin-left: auto; border: 1px solid var(--coral); background: #fff; color: var(--coral-d); border-radius: 999px; padding: 4px 12px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .day-view.on { background: var(--coral); color: #fff; }
+    .day-card.dim { opacity: .5; }
+    .stop .name.link { cursor: pointer; }
+    .stop .name.link:hover { text-decoration: underline; }
+    .detail { position: absolute; left: 16px; top: 16px; bottom: 16px; width: 340px; max-width: calc(100% - 32px); background: #fff; border-radius: 20px; border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(30, 70, 50, .22); overflow-y: auto; z-index: 6; }
+    .detail[hidden] { display: none; }
+    .dt-close { position: absolute; right: 10px; top: 10px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .92); color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; padding: 0; }
+    .dt-close svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; }
+    .dt-photo { height: 190px; background: linear-gradient(135deg, var(--peach), var(--butter)); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .dt-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .dt-photo img.ph { width: 96px; height: 96px; object-fit: contain; }
+    .dt-by { position: absolute; left: 8px; bottom: 6px; font-size: 10px; color: #fff; background: rgba(0, 0, 0, .45); padding: 1px 8px; border-radius: 999px; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dt-body { padding: 16px 18px 22px; }
+    .dt-meta { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .dt-body h3 { margin: 0 0 10px; font-size: 20px; letter-spacing: -0.01em; }
+    .dt-visit { background: var(--peach); color: var(--coral-d); border-radius: 12px; padding: 8px 12px; font-size: 13px; margin-bottom: 12px; }
+    .dt-sum { font-size: 14px; line-height: 1.65; margin: 0 0 14px; }
+    .dt-sum.none { color: var(--muted); }
+    .dt-row { display: flex; gap: 10px; font-size: 13px; line-height: 1.55; padding: 9px 0; border-top: 1px solid var(--line); word-break: break-all; }
+    .dt-row .ic { flex: none; width: 20px; text-align: center; }
+    .dt-hours { list-style: none; margin: 0; padding: 0; }
+    .dt-hours li.today { font-weight: 700; color: var(--coral-d); }
+    .dt-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .dt-links a { display: inline-block; border: 1px solid var(--coral); color: var(--coral-d); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; text-decoration: none; }
+    .dt-links a:hover { background: var(--coral); color: #fff; }
+    @media (max-width: 760px) { .detail { position: fixed; left: 8px; right: 8px; top: 8%; bottom: 8px; width: auto; max-width: none; } }
   </style>
 </head>
 <body>
@@ -290,6 +320,7 @@
     <div id="toast" role="status" aria-live="polite"></div>
     <div class="map-wrap">
       <div id="map"></div>
+      <aside id="detail" class="detail" hidden aria-live="polite"></aside>
       <div class="banner" id="banner"></div>
     </div>
   </div>
@@ -389,6 +420,8 @@
     let region = null;          // { name, viewport }
     let selected = [];          // { id, name, address, loc, types, rating, periods, stay, isMeal, isBase, marker }
     let routeLines = [];
+    let lastPlan = null;        // { results, cfg } 마지막으로 만든 일정
+    let viewDay = null;         // null이면 전체 코스, 숫자면 그 날의 코스만 표시
     let planToken = 0;
 
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -493,9 +526,10 @@
         onRemove() { this.el.remove(); }
       };
     }
-    function createPlaceMarker(loc) {
+    function createPlaceMarker(loc, onClick) {
       const el = document.createElement('div');
       el.className = 'hm';
+      el.addEventListener('click', (e) => { e.stopPropagation(); if (onClick) onClick(); });
       const overlay = new HtmlMarker(new google.maps.LatLng(loc.lat, loc.lng), el);
       return {
         setMap(m) { overlay.setMap(m); },
@@ -552,6 +586,8 @@
       defineHtmlMarker();
       initTripControls();
       initHeaderActions();
+      map.addListener('click', closeDetail);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDetail(); });
       els.lodgingForm.addEventListener('submit', (e) => { e.preventDefault(); searchLodging(els.lodgingInput.value); });
 
       els.regionForm.addEventListener('submit', (e) => { e.preventDefault(); setRegion(els.regionInput.value.trim()); });
@@ -916,7 +952,7 @@
       if (!p.isBase && selected.filter(s => !s.isBase).length >= MAX_PLACES) { alert(`장소는 최대 ${MAX_PLACES}곳까지 추가할 수 있어요.`); return; }
       const types = p.types || [];
       const cat = CATS[p.cat] ? p.cat : catOf(types);
-      const marker = createPlaceMarker(p.loc);
+      const marker = createPlaceMarker(p.loc, () => openDetail(selected.find(s => s.marker === marker)));
       selected.push({
         id: p.id, name: p.name, address: p.address, loc: p.loc, types, rating: p.rating || null, periods: p.periods || null,
         cat, stay: p.stay || CATS[cat].stay, isMeal: cat === 'food', isBase: !!p.isBase, marker,
@@ -948,6 +984,8 @@
 
     function clearResult() {
       planToken++;
+      lastPlan = null;
+      viewDay = null;
       routeLines.forEach(l => l.setMap(null));
       routeLines = [];
       els.result.style.display = 'none';
@@ -984,6 +1022,7 @@
           changed(false);
         });
         li.querySelector('.x').addEventListener('click', () => removePlace(i));
+        li.querySelector('.grow').addEventListener('click', () => { openDetail(p); map.panTo(p.loc); });
         els.places.appendChild(li);
       });
       renderLodging();
@@ -1311,13 +1350,17 @@
       if (overtimeDays) bullets.push(`⚠️ ${overtimeDays}일은 하루 종료 시각을 넘겨요. 일수를 늘리거나 장소를 줄여 보세요.`);
 
       let html = `<h2>🌟 추천 일정</h2><div class="summary"><ul class="bullets" style="margin:0">${bullets.map(b => `<li>${b}</li>`).join('')}</ul>` +
-        (M.estimated ? `<div class="note">※ 이 지역/수단은 실제 경로 정보를 받지 못해 직선거리 기반 추정 이동 시간을 썼어요.</div>` : '') + `</div>`;
+        (M.estimated ? `<div class="note">※ 이 지역/수단은 실제 경로 정보를 받지 못해 직선거리 기반 추정 이동 시간을 썼어요.</div>` : '') + `</div>` +
+        (results.length > 1
+          ? `<div class="day-tabs"><button type="button" class="on" data-view="all">전체 코스</button>${results.map((_, k) => `<button type="button" data-view="${k}">Day ${k + 1}</button>`).join('')}</div>`
+          : '');
 
       results.forEach((r, k) => {
         const color = DAY_COLORS[k % DAY_COLORS.length];
         const names = r.order.map(i => selected[i].name);
-        html += `<div class="day-card"><div class="day-head" data-day="${k}"><span class="day-badge" style="background:${color}">Day ${k + 1}</span>` +
-          `<b>${fmtDate(cfg.dates[k])}</b><span class="day-meta">이동 ${fmtDur(r.travel)} · ${fmtClock(cfg.start)}~${fmtClock(r.finish)}</span></div>`;
+        html += `<div class="day-card" data-day="${k}"><div class="day-head" data-day="${k}"><span class="day-badge" style="background:${color}">Day ${k + 1}</span>` +
+          `<b>${fmtDate(cfg.dates[k])}</b><span class="day-meta">이동 ${fmtDur(r.travel)} · ${fmtClock(cfg.start)}~${fmtClock(r.finish)}</span>` +
+          (results.length > 1 ? `<button type="button" class="day-view" data-view="${k}">이 코스만 보기</button>` : '') + `</div>`;
         if (r.overtime > 0) html += `<div class="day-warn">하루 종료(${fmtClock(cfg.end)})보다 ${fmtDur(r.overtime)} 늦게 끝나요.</div>`;
         if (cfg.base !== null) html += `<div class="stop"><div class="rail"><span class="num" style="background:${BASE_COLOR}">🏨</span><span class="line"></span></div><div class="body"><div class="name">${esc(selected[cfg.base].name)}</div><div class="time">${fmtClock(cfg.start)} 출발</div></div></div>`;
         r.stops.forEach((s, n) => {
@@ -1331,7 +1374,7 @@
             nohours: '<div class="flag info">ℹ️ 영업시간 정보 없음</div>',
           }[f])).join('');
           html += `<div class="stop"><div class="rail"><span class="num" style="background:${color}">${n + 1}</span>${(n < r.stops.length - 1 || r.returnLeg) ? '<span class="line"></span>' : ''}</div>` +
-            `<div class="body">${leg}<div class="name">${CATS[p.cat].emoji} ${esc(p.name)}</div>` +
+            `<div class="body">${leg}<div class="name link" data-idx="${s.idx}" title="상세 정보 보기">${CATS[p.cat].emoji} ${esc(p.name)}</div>` +
             `<div class="time">${fmtClock(s.start)} ~ ${fmtClock(s.end)} (${fmtDur(p.stay)})</div>${flagHtml}</div></div>`;
         });
         if (r.returnLeg) html += `<div class="stop"><div class="rail"><span class="num" style="background:${BASE_COLOR}">↩</span></div><div class="body"><div class="leg">${MODE_EMOJI[cfg.mode]} ${fmtDur(r.returnLeg.travel)} · ${fmtDist(r.returnLeg.dist)}</div><div class="name">숙소 복귀</div><div class="time">${fmtClock(r.returnLeg.arrive)} 도착</div></div></div>`;
@@ -1340,13 +1383,16 @@
 
       els.result.innerHTML = html;
       els.result.style.display = 'block';
-      els.result.querySelectorAll('.day-head').forEach(h => h.addEventListener('click', () => {
-        const r = results[+h.dataset.day];
-        const b = new google.maps.LatLngBounds();
-        r.order.forEach(i => b.extend(selected[i].loc));
-        if (cfg.base !== null) b.extend(selected[cfg.base].loc);
-        map.fitBounds(b, 70);
+      lastPlan = { results, cfg };
+      viewDay = null;
+      // 날짜 머리글을 누르면 그날 코스로 지도를 옮기고, 버튼을 누르면 그 코스만 따로 본다.
+      els.result.querySelectorAll('.day-head').forEach(h => h.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        fitToDay(+h.dataset.day);
       }));
+      els.result.querySelectorAll('.day-view').forEach(b => b.addEventListener('click', () => setDayView(+b.dataset.view)));
+      els.result.querySelectorAll('.day-tabs button').forEach(b => b.addEventListener('click', () => setDayView(b.dataset.view === 'all' ? null : +b.dataset.view, true)));
+      els.result.querySelectorAll('.stop .name[data-idx]').forEach(n => n.addEventListener('click', () => openDetail(selected[+n.dataset.idx])));
 
       // 마커를 날짜 색과 방문 순서로 갱신
       selected.forEach(p => p.marker.setMap(map));
@@ -1356,13 +1402,146 @@
       fitAll();
     }
 
+    // ---------- 코스별 보기 ----------
+    function fitToDay(k) {
+      if (!lastPlan) return;
+      const { results, cfg } = lastPlan;
+      const b = new google.maps.LatLngBounds();
+      results[k].order.forEach(i => b.extend(selected[i].loc));
+      if (cfg.base !== null) b.extend(selected[cfg.base].loc);
+      map.fitBounds(b, 90);
+    }
+
+    // v가 null이면 전체 코스, 숫자면 그 날의 코스만 지도에 남긴다. 같은 코스를 다시 누르면 전체로 돌아간다.
+    function setDayView(v, forceSet) {
+      viewDay = (!forceSet && v === viewDay) ? null : v;
+      applyDayView(true);
+    }
+
+    function applyDayView(fit) {
+      if (!lastPlan) return;
+      const { results, cfg } = lastPlan;
+      const show = new Set();
+      results.forEach((r, k) => {
+        if (viewDay !== null && viewDay !== k) return;
+        r.order.forEach(i => show.add(i));
+        if (cfg.base !== null) show.add(cfg.base);
+      });
+      selected.forEach((p, i) => p.marker.setMap(show.has(i) ? map : null));
+      routeLines.forEach(l => l.setMap(viewDay === null || l.dayIdx === viewDay ? map : null));
+      els.result.querySelectorAll('.day-tabs button').forEach(b => b.classList.toggle('on', b.dataset.view === (viewDay === null ? 'all' : String(viewDay))));
+      els.result.querySelectorAll('.day-view').forEach(b => {
+        const on = viewDay === +b.dataset.view;
+        b.classList.toggle('on', on);
+        b.textContent = on ? '전체 보기' : '이 코스만 보기';
+      });
+      els.result.querySelectorAll('.day-card').forEach(c => c.classList.toggle('dim', viewDay !== null && +c.dataset.day !== viewDay));
+      if (fit) {
+        if (viewDay === null) fitAll(); else fitToDay(viewDay);
+      }
+    }
+
+    // ---------- 장소 상세 정보 ----------
+    const detailCache = {};
+    let detailToken = 0;
+
+    async function fetchDetail(p) {
+      if (detailCache[p.id]) return detailCache[p.id];
+      const pl = new Place({ id: p.id, requestedLanguage: 'ko' });
+      await pl.fetchFields({ fields: ['photos', 'editorialSummary', 'generativeSummary', 'formattedAddress', 'nationalPhoneNumber', 'websiteURI', 'googleMapsURI', 'regularOpeningHours', 'rating', 'userRatingCount'] });
+      const photo = pl.photos && pl.photos[0];
+      const gs = pl.generativeSummary && pl.generativeSummary.overview;
+      const d = {
+        photoUrl: photo ? photo.getURI({ maxWidth: 680 }) : '',
+        photoBy: photo && photo.authorAttributions && photo.authorAttributions[0] ? photo.authorAttributions[0].displayName : '',
+        summary: pl.editorialSummary || (typeof gs === 'string' ? gs : (gs && gs.text) || ''),
+        address: pl.formattedAddress || p.address || '',
+        phone: pl.nationalPhoneNumber || '',
+        website: pl.websiteURI || '',
+        mapsUrl: pl.googleMapsURI || '',
+        hours: pl.regularOpeningHours && pl.regularOpeningHours.weekdayDescriptions ? pl.regularOpeningHours.weekdayDescriptions : null,
+        rating: pl.rating || p.rating || null,
+        count: pl.userRatingCount || 0,
+      };
+      detailCache[p.id] = d;
+      return d;
+    }
+
+    function visitInfo(p) {
+      if (p.isBase) return { html: '<div class="dt-visit">🏨 숙소 · 매일 이곳에서 출발해요</div>', date: null };
+      if (!lastPlan) return { html: '', date: null };
+      const idx = selected.indexOf(p);
+      const { results, cfg } = lastPlan;
+      for (let k = 0; k < results.length; k++) {
+        const n = results[k].stops.findIndex(s => s.idx === idx);
+        if (n >= 0) {
+          const s = results[k].stops[n];
+          return { html: `<div class="dt-visit"><b>Day ${k + 1}</b> · ${fmtDate(cfg.dates[k])} · ${n + 1}번째<br>${fmtClock(s.start)} ~ ${fmtClock(s.end)} (${fmtDur(p.stay)} 머물러요)</div>`, date: cfg.dates[k] };
+        }
+      }
+      return { html: '', date: null };
+    }
+
+    function detailHtml(p, d, loading) {
+      const cat = p.isBase ? { emoji: '🏨', label: '숙소' } : CATS[p.cat];
+      const v = visitInfo(p);
+      const todayIdx = ((v.date || new Date()).getDay() + 6) % 7;      // Google의 요일 설명은 월요일부터 시작한다.
+      const safeUrl = u => (/^https?:\/\//i.test(u) ? u : '');
+      const rating = d && d.rating ? ` · ★ ${d.rating}${d.count ? ` (${d.count.toLocaleString()})` : ''}` : '';
+      let body;
+      if (loading) body = '<p class="dt-sum none">상세 정보를 불러오는 중이에요…</p>';
+      else {
+        body = `<p class="dt-sum${d && d.summary ? '' : ' none'}">${d && d.summary ? esc(d.summary) : '소개 정보가 제공되지 않는 장소예요.'}</p>`;
+        body += `<div class="dt-row"><span class="ic">📍</span><span>${esc((d && d.address) || p.address || '주소 정보 없음')}</span></div>`;
+        if (d && d.phone) body += `<div class="dt-row"><span class="ic">📞</span><a href="tel:${esc(d.phone.replace(/[^0-9+]/g, ''))}">${esc(d.phone)}</a></div>`;
+        body += `<div class="dt-row"><span class="ic">🕘</span>` + (d && d.hours
+          ? `<ul class="dt-hours">${d.hours.map((h, i) => `<li${i === todayIdx ? ' class="today"' : ''}>${esc(h)}</li>`).join('')}</ul>`
+          : '<span>영업시간 정보가 없어요</span>') + `</div>`;
+        const links = [];
+        if (d && safeUrl(d.website)) links.push(`<a href="${esc(safeUrl(d.website))}" target="_blank" rel="noopener">웹사이트</a>`);
+        const maps = (d && safeUrl(d.mapsUrl)) || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name)}&query_place_id=${encodeURIComponent(p.id)}`;
+        links.push(`<a href="${esc(maps)}" target="_blank" rel="noopener">구글 지도에서 보기</a>`);
+        body += `<div class="dt-links">${links.join('')}</div>`;
+      }
+      const photo = d && d.photoUrl
+        ? `<img src="${esc(d.photoUrl)}" alt="${esc(p.name)}">${d.photoBy ? `<span class="dt-by">사진: ${esc(d.photoBy)}</span>` : ''}`
+        : `<img class="ph" src="${illustUrl(p.isBase ? 'hotel' : p.cat)}" alt="">`;
+      return `<button type="button" class="dt-close" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>` +
+        `<div class="dt-photo">${photo}</div><div class="dt-body"><div class="dt-meta">${cat.emoji} ${cat.label}${rating}</div><h3>${esc(p.name)}</h3>${v.html}${body}</div>`;
+    }
+
+    async function openDetail(p) {
+      if (!p) return;
+      const token = ++detailToken;
+      const el = document.getElementById('detail');
+      const bind = () => {
+        el.querySelector('.dt-close').addEventListener('click', closeDetail);
+        const img = el.querySelector('.dt-photo img:not(.ph)');
+        if (img) img.addEventListener('error', () => { img.classList.add('ph'); img.src = illustUrl(p.isBase ? 'hotel' : p.cat); });
+      };
+      el.hidden = false;
+      el.scrollTop = 0;
+      el.innerHTML = detailHtml(p, null, true);
+      bind();
+      let d = null;
+      try { d = await fetchDetail(p); } catch (e) { console.warn('상세 정보를 불러오지 못했어요', e); }
+      if (token !== detailToken) return;
+      el.innerHTML = detailHtml(p, d, false);
+      bind();
+    }
+
+    function closeDetail() {
+      detailToken++;
+      document.getElementById('detail').hidden = true;
+    }
+
     async function drawRoutes(results, cfg, M, token) {
       routeLines.forEach(l => l.setMap(null));
       routeLines = [];
       const legs = [];
       results.forEach((r, k) => {
         const seq = [...(cfg.base !== null ? [cfg.base] : []), ...r.order, ...(cfg.returnBase ? [cfg.base] : [])];
-        for (let i = 0; i < seq.length - 1; i++) if (seq[i] !== seq[i + 1]) legs.push({ a: seq[i], b: seq[i + 1], color: DAY_COLORS[k % DAY_COLORS.length] });
+        for (let i = 0; i < seq.length - 1; i++) if (seq[i] !== seq[i + 1]) legs.push({ a: seq[i], b: seq[i + 1], day: k, color: DAY_COLORS[k % DAY_COLORS.length] });
       });
       const paths = await Promise.all(legs.map(async (l) => {
         if (M.estimated) return null;
@@ -1378,14 +1557,17 @@
       if (token !== planToken) return;
       legs.forEach((l, i) => {
         const a = selected[l.a].loc, b = selected[l.b].loc;
-        routeLines.push(paths[i]
+        const line = (paths[i]
           ? new google.maps.Polyline({ path: paths[i], map, strokeColor: l.color, strokeWeight: 5, strokeOpacity: 0.85 })
           : new google.maps.Polyline({
               path: [a, b], map, strokeOpacity: 0, strokeColor: l.color,
               icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: 0.9, scale: 3 }, offset: '0', repeat: '14px' },
                       { icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, scale: 3, fillColor: l.color, fillOpacity: 1, strokeColor: l.color, strokeWeight: 1 }, offset: '50%' }],
             }));
+        line.dayIdx = l.day;
+        routeLines.push(line);
       });
+      applyDayView(false);
     }
 
     function showBanner(html) { els.banner.innerHTML = html; els.banner.style.display = 'flex'; }
