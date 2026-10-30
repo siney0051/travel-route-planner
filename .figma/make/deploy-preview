@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+: "${MAPS_API_KEY:?MAPS_API_KEY is required}"
+
+build_dir="/tmp/figma-make-deploy-preview-${UID}"
+rm -rf "$build_dir"
+mkdir -p "$build_dir"
+cp index.html "$build_dir/index.html"
+cp -R public/assets "$build_dir/assets"
+
+python3 - "$build_dir/config.js" <<'PY'
+import json
+import os
+import pathlib
+import sys
+
+pathlib.Path(sys.argv[1]).write_text(
+    f"window.MAPS_API_KEY = {json.dumps(os.environ['MAPS_API_KEY'])};\n",
+    encoding="utf-8",
+)
+PY
+
+[[ -d "$build_dir" ]] || {
+  echo "Expected build output at $build_dir" >&2
+  exit 1
+}
+
+figma make deploy-preview --build-dir "$build_dir"

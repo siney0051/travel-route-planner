@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+: "${MAPS_API_KEY:?MAPS_API_KEY is required}"
+: "${PORT:?PORT is required}"
+
+site_dir="/tmp/figma-make-static-${UID}"
+rm -rf "$site_dir"
+mkdir -p "$site_dir"
+cp index.html "$site_dir/index.html"
+cp -R public/assets "$site_dir/assets"
+
+python3 - "$site_dir/config.js" <<'PY'
+import json
+import os
+import pathlib
+import sys
+
+pathlib.Path(sys.argv[1]).write_text(
+    f"window.MAPS_API_KEY = {json.dumps(os.environ['MAPS_API_KEY'])};\n",
+    encoding="utf-8",
+)
+PY
+
+exec python3 -m http.server "$PORT" --bind 0.0.0.0 --directory "$site_dir"
