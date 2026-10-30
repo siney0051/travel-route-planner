@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
   <style>
     :root {
       --bg: #f1f9f0;
@@ -20,7 +20,7 @@
       --mint: #cfeaf7;
       --radius: 16px;
     }
-    html, body { height: 100%; margin: 0; font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif; color: var(--ink); background: var(--bg); }
+    html, body { height: 100%; margin: 0; font-family: "Noto Sans KR", "Malgun Gothic", sans-serif; color: var(--ink); background: var(--bg); }
     h1, h2, .num, .primary, .summary b, .stop .name { font-family: inherit; font-weight: 700; letter-spacing: -0.01em; }
     .app { display: flex; height: 100%; }
     .sidebar { width: 410px; display: flex; flex-direction: column; background: var(--bg); z-index: 2; overflow-y: auto; padding: 14px; box-sizing: border-box; gap: 12px; box-shadow: 4px 0 18px rgba(60, 110, 80, .12); }
@@ -32,8 +32,7 @@
     .row { display: flex; gap: 8px; margin: 0; }
     .row input { flex: 1; min-width: 0; padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--ink); border: 2px solid var(--line); border-radius: 999px; background: #fbfefb; outline: none; }
     .row input:focus, select:focus, input[type=time]:focus, input[type=number]:focus { border-color: var(--coral); }
-    .row button { padding: 0 18px; border: 0; border-radius: 999px; background: var(--coral); color: #fff; font-size: 14px; font-family: inherit; font-weight: 700; cursor: pointer; box-shadow: 0 3px 0 var(--coral-d); }
-    .row button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--coral-d); }
+    .row button { padding: 0 18px; border: 0; border-radius: 999px; background: var(--coral); color: #fff; font-size: 14px; font-family: inherit; font-weight: 700; cursor: pointer; }
     .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
     .hint.err { color: #d9534f; }
     .cands { list-style: none; margin: 10px 0 0; padding: 0; }
@@ -57,9 +56,8 @@
     .x { border: 0; background: var(--peach); width: 26px; height: 26px; border-radius: 50%; font-size: 16px; line-height: 1; color: var(--coral-d); cursor: pointer; }
     .x:hover { background: var(--coral); color: #fff; }
     .empty { font-size: 13px; color: var(--muted); padding: 4px 0; text-align: center; }
-    .primary { width: 100%; padding: 14px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #86d072, var(--coral-d)); color: #fff; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #3c8a36, 0 8px 16px rgba(77, 164, 70, .3); }
-    .primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #3c8a36; }
-    .primary:disabled { background: #e0ebe2; color: #a9bdb1; box-shadow: 0 4px 0 #cddbd0; cursor: default; }
+    .primary { width: 100%; padding: 14px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #86d072, var(--coral-d)); color: #fff; font-size: 18px; cursor: pointer; }
+    .primary:disabled { background: #e0ebe2; color: #a9bdb1; cursor: default; }
     .link { background: none; border: 0; color: var(--coral-d); font-size: 12px; cursor: pointer; padding: 6px 0 0; font-family: inherit; }
     .summary { background: var(--butter); border-radius: 14px; padding: 14px; font-size: 13px; line-height: 1.7; }
     .summary b { font-size: 18px; color: var(--coral-d); }
@@ -118,7 +116,8 @@
     .cal { user-select: none; }
     .cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .cal-title { font-family: inherit; font-weight: 700; font-size: 17px; }
-    .cal-nav { border: 0; background: var(--peach); color: var(--coral-d); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 18px; line-height: 1; }
+    .cal-nav { border: 0; background: var(--peach); color: var(--coral-d); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
+    .cal-nav svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
     .cal-nav:hover { background: var(--coral); color: #fff; }
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 4px; text-align: center; }
     .cal-dow { font-size: 11px; color: var(--muted); padding: 2px 0; }
@@ -144,7 +143,7 @@
     .seg button { border: 2px solid var(--line); background: #fbfefb; border-radius: 14px; padding: 8px 2px; font-family: inherit; font-size: 12px; color: var(--ink); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
     .seg button span { font-size: 20px; }
     .seg button:hover { border-color: #bfe3b2; }
-    .seg button.on { background: var(--peach); border-color: var(--coral); color: var(--coral-d); font-family: inherit; font-weight: 700; box-shadow: 0 2px 0 var(--coral); }
+    .seg button.on { background: var(--peach); border-color: var(--coral); color: var(--coral-d); font-family: inherit; font-weight: 700; }
     .switch-row { display: flex; align-items: center; gap: 10px; font-size: 13px; margin: 8px 0; cursor: pointer; }
     .switch-row input { position: absolute; opacity: 0; width: 0; height: 0; }
     .sw { flex: none; width: 42px; height: 24px; border-radius: 999px; background: #d9e6dc; position: relative; transition: background .2s; }
@@ -155,7 +154,7 @@
     .switch-row small { color: var(--muted); }
     .steppers.one { grid-template-columns: 1fr; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-    .act { display: inline-flex; align-items: center; gap: 5px; border: 0; background: rgba(255, 255, 255, .78); color: var(--coral-d); border-radius: 999px; padding: 7px 12px; font-family: inherit; font-weight: 600; font-size: 12.5px; cursor: pointer; box-shadow: 0 1px 3px rgba(60, 110, 80, .18); }
+    .act { display: inline-flex; align-items: center; gap: 5px; border: 0; background: rgba(255, 255, 255, .78); color: var(--coral-d); border-radius: 999px; padding: 7px 12px; font-family: inherit; font-weight: 600; font-size: 12.5px; cursor: pointer; }
     .act:hover { background: #fff; }
     .act.danger { color: #c2543a; }
     .act svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -192,7 +191,7 @@
         <h2>🗺️ 1. 어디로 떠나요?</h2>
         <form class="row" id="regionForm">
           <input type="text" id="regionInput" placeholder="예: 일본 도쿄, 프랑스 파리, 제주도" autocomplete="off">
-          <button type="submit">설정</button>
+          <button type="submit">확인</button>
         </form>
         <div class="hint" id="regionHint"></div>
       </div>
@@ -201,7 +200,7 @@
         <h2>🏨 2. 숙소 <span class="opt">(선택)</span></h2>
         <form class="row" id="lodgingForm">
           <input type="text" id="lodgingInput" placeholder="예: 신주쿠 그랜비아 호텔" autocomplete="off">
-          <button type="submit">설정</button>
+          <button type="submit">확인</button>
         </form>
         <div class="hint">숙소를 정하면 매일 숙소에서 출발해 돌아오는 동선으로 짜요.</div>
         <ul class="cands" id="lodgingCands"></ul>
@@ -283,7 +282,7 @@
       </div>
 
       <div class="section">
-        <button class="primary" id="planBtn" disabled>✨ 최적 일정 만들기</button>
+        <button class="primary" id="planBtn" disabled>일정 최적화하기</button>
       </div>
 
       <div class="section" id="result" style="display:none"></div>
@@ -848,7 +847,7 @@
       const dim = new Date(y, m + 1, 0).getDate(), lead = new Date(y, m, 1).getDay();
       const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const sel = tripStartDate().getTime();
-      let html = `<div class="cal-head"><button type="button" class="cal-nav" data-nav="-1" aria-label="이전 달">‹</button><span class="cal-title">${y}년 ${m + 1}월</span><button type="button" class="cal-nav" data-nav="1" aria-label="다음 달">›</button></div><div class="cal-grid">`;
+      let html = `<div class="cal-head"><button type="button" class="cal-nav" data-nav="-1" aria-label="이전 달"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><span class="cal-title">${y}년 ${m + 1}월</span><button type="button" class="cal-nav" data-nav="1" aria-label="다음 달"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div><div class="cal-grid">`;
       for (const w of '일월화수목금토') html += `<span class="cal-dow">${w}</span>`;
       for (let i = 0; i < lead; i++) html += '<span class="cal-day empty"></span>';
       for (let day = 1; day <= dim; day++) {
@@ -1249,7 +1248,7 @@
       if (els.lodgingInput.value.trim() && !selected.some(p => p.isBase)) await searchLodging(els.lodgingInput.value);
       const token = ++planToken;
       els.planBtn.disabled = true;
-      els.planBtn.textContent = '🐾 열심히 일정 짜는 중…';
+      els.planBtn.textContent = '최적화하는 중…';
       await new Promise(r => setTimeout(r, 30));
 
       const mode = els.mode.value;
@@ -1283,7 +1282,7 @@
       render(results, naive, cfg);
 
       els.planBtn.disabled = false;
-      els.planBtn.textContent = '✨ 최적 일정 만들기';
+      els.planBtn.textContent = '일정 최적화하기';
       drawRoutes(results, cfg, M, token);
     }
 
