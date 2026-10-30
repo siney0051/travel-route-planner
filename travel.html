@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>여행 동선 플래너</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff8ef;
+      --card: #ffffff;
+      --ink: #5a4636;
+      --muted: #a08c7a;
+      --line: #f3e3d0;
+      --coral: #ff8a65;
+      --coral-d: #f06f48;
+      --peach: #ffe3d1;
+      --butter: #ffe9a8;
+      --mint: #cfeedd;
+      --radius: 16px;
+    }
+    html, body { height: 100%; margin: 0; font-family: "Gowun Dodum", "Malgun Gothic", sans-serif; color: var(--ink); background: var(--bg); }
+    h1, h2, .num, .primary, .summary b, .stop .name { font-family: "Jua", "Gowun Dodum", "Malgun Gothic", sans-serif; font-weight: normal; }
+    .app { display: flex; height: 100%; }
+    .sidebar { width: 410px; display: flex; flex-direction: column; background: var(--bg); z-index: 2; overflow-y: auto; padding: 14px; box-sizing: border-box; gap: 12px; box-shadow: 4px 0 18px rgba(160, 110, 70, .12); }
+    .section { background: var(--card); border-radius: var(--radius); padding: 14px 16px; box-shadow: 0 3px 0 var(--line), 0 6px 14px rgba(160, 110, 70, .08); }
+    .section.hero { background: linear-gradient(135deg, var(--peach), var(--butter)); box-shadow: 0 3px 0 #f6d3b3; }
+    .section h2 { font-size: 16px; margin: 0 0 10px; color: var(--coral-d); }
+    h1 { font-size: 24px; margin: 0 0 4px; }
+    .sub { margin: 0; font-size: 14px; color: #8a6d57; line-height: 1.5; }
+    .row { display: flex; gap: 8px; margin: 0; }
+    .row input { flex: 1; min-width: 0; padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--ink); border: 2px solid var(--line); border-radius: 999px; background: #fffdf9; outline: none; }
+    .row input:focus, select:focus, input[type=time]:focus, input[type=number]:focus { border-color: var(--coral); }
+    .row button { padding: 0 18px; border: 0; border-radius: 999px; background: var(--coral); color: #fff; font-size: 14px; font-family: "Jua", inherit; cursor: pointer; box-shadow: 0 3px 0 var(--coral-d); }
+    .row button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--coral-d); }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .hint.err { color: #d9534f; }
+    .cands { list-style: none; margin: 10px 0 0; padding: 0; }
+    .cands li { padding: 10px 14px; border: 2px solid var(--line); border-radius: 14px; margin-bottom: 8px; cursor: pointer; font-size: 13px; background: #fffdf9; }
+    .cands li:hover { background: var(--peach); border-color: var(--coral); }
+    .cands .n { font-weight: bold; }
+    .cands .a { color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; }
+    .grid label { display: flex; flex-direction: column; gap: 5px; color: var(--muted); }
+    .grid .full { grid-column: 1 / -1; }
+    select, input[type=time], input[type=number] { padding: 9px 10px; font-size: 14px; font-family: inherit; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; background: #fffdf9; outline: none; }
+    .check { flex-direction: row !important; align-items: center; gap: 8px !important; color: var(--ink) !important; }
+    .check input { accent-color: var(--coral); width: 18px; height: 18px; }
+    .places { list-style: none; margin: 0; padding: 0; }
+    .places li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 2px dotted var(--line); font-size: 14px; }
+    .places li:last-child { border-bottom: 0; }
+    .num { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--coral); color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 0 var(--coral-d); }
+    .grow { flex: 1; min-width: 0; }
+    .grow .n { font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .grow .a { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .x { border: 0; background: var(--peach); width: 26px; height: 26px; border-radius: 50%; font-size: 16px; line-height: 1; color: var(--coral-d); cursor: pointer; }
+    .x:hover { background: var(--coral); color: #fff; }
+    .empty { font-size: 13px; color: var(--muted); padding: 4px 0; text-align: center; }
+    .primary { width: 100%; padding: 14px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #ff9a76, var(--coral-d)); color: #fff; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #d85a35, 0 8px 16px rgba(240, 111, 72, .3); }
+    .primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #d85a35; }
+    .primary:disabled { background: #ecdccb; color: #b9a592; box-shadow: 0 4px 0 #dcc9b5; cursor: default; }
+    .link { background: none; border: 0; color: var(--coral-d); font-size: 12px; cursor: pointer; padding: 6px 0 0; font-family: inherit; }
+    .summary { background: var(--butter); border-radius: 14px; padding: 14px; font-size: 13px; line-height: 1.7; }
+    .summary b { font-size: 18px; color: var(--coral-d); }
+    .note { font-size: 12px; color: #a0662a; margin-top: 8px; background: #fff5d6; border-radius: 10px; padding: 8px 10px; }
+    .stop { display: flex; gap: 10px; }
+    .stop .rail { display: flex; flex-direction: column; align-items: center; }
+    .stop .rail .line { flex: 1; width: 0; border-left: 3px dotted #f0c7a8; margin: 3px 0; }
+    .stop .body { padding-bottom: 8px; flex: 1; min-width: 0; }
+    .stop .name { font-size: 16px; }
+    .stop .time { font-size: 12px; color: var(--muted); }
+    .leg { font-size: 12px; color: #4a8b6a; background: var(--mint); border-radius: 999px; padding: 4px 12px; margin: 8px 0; display: inline-block; }
+    .section a { color: var(--coral-d); }
+    .map-wrap { flex: 1; position: relative; }
+    #map { position: absolute; inset: 0; }
+    .banner { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; background: var(--bg); z-index: 5; padding: 24px; line-height: 1.6; }
+    @media (max-width: 760px) {
+      .app { flex-direction: column-reverse; }
+      .sidebar { width: 100%; height: 58%; box-shadow: 0 -4px 18px rgba(160, 110, 70, .15); border-radius: 20px 20px 0 0; }
+      .map-wrap { height: 42%; flex: none; }
+    }
+    .places li.base { background: #fff5d6; border-radius: 12px; padding-left: 8px; padding-right: 8px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+    .tag { font-size: 11px; background: var(--peach); color: #b0603c; border-radius: 999px; padding: 1px 8px; }
+    .tag.gray { background: #f1ebe4; color: var(--muted); }
+    .stay { width: 54px; padding: 5px 6px !important; font-size: 12px !important; text-align: center; }
+    .stay-wrap { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: var(--muted); gap: 2px; }
+    .base-btn { border: 0; background: #f1ebe4; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; filter: grayscale(1); opacity: .6; }
+    .base-btn.on { background: var(--butter); filter: none; opacity: 1; }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .bullets { margin: 10px 0 0; padding: 0; list-style: none; font-size: 13px; line-height: 1.6; }
+    .day-card { border: 2px solid var(--line); border-radius: 16px; padding: 12px; margin-top: 12px; background: #fffdf9; }
+    .day-head { display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 8px; flex-wrap: wrap; }
+    .day-badge { color: #fff; border-radius: 999px; padding: 2px 12px; font-family: "Jua", sans-serif; font-size: 14px; }
+    .day-meta { font-size: 12px; color: var(--muted); }
+    .flag { font-size: 12px; margin-top: 3px; }
+    .flag.warn { color: #c2410c; }
+    .flag.ok { color: #4a8b6a; }
+    .flag.info { color: var(--muted); }
+    .day-warn { background: #ffe4dc; color: #b3411d; border-radius: 10px; padding: 6px 10px; font-size: 12px; margin-bottom: 8px; }
+    .sugg-wrap { display: none; margin-top: 10px; }
+    .sugg-wrap .hint { margin: 0 0 6px; }
+    .sugg { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sugg button { border: 2px solid #f6c7ae; background: #fff5ec; color: var(--ink); border-radius: 999px; padding: 6px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+    .sugg button:hover { background: var(--peach); border-color: var(--coral); }
+    .sugg button.done { opacity: .45; cursor: default; background: #f1ebe4; border-color: var(--line); }
+    .cat-sum { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .cat-sum:empty { display: none; }
+    .cat-chip { background: var(--butter); border-radius: 999px; padding: 3px 10px; font-size: 12px; }
+    button.tag.cat { border: 0; font-family: inherit; cursor: pointer; background: var(--butter); color: #8a5a1c; }
+    button.tag.cat:hover { background: var(--coral); color: #fff; }
+    .opt { font-size: 12px; color: var(--muted); font-family: "Gowun Dodum", sans-serif; }
+    .lodging-card { display: flex; align-items: center; gap: 10px; margin-top: 10px; background: #fff5d6; border-radius: 14px; padding: 10px 12px; }
+    .lodging-card .ic { font-size: 22px; }
+    .field-label { font-size: 13px; color: var(--muted); margin: 14px 0 6px; }
+    .field-label:first-of-type { margin-top: 0; }
+    .cal { user-select: none; }
+    .cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .cal-title { font-family: "Jua", sans-serif; font-size: 17px; }
+    .cal-nav { border: 0; background: var(--peach); color: var(--coral-d); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 18px; line-height: 1; }
+    .cal-nav:hover { background: var(--coral); color: #fff; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 4px; text-align: center; }
+    .cal-dow { font-size: 11px; color: var(--muted); padding: 2px 0; }
+    .cal-dow:nth-child(1) { color: #e0707a; }
+    .cal-day { border: 0; background: none; height: 34px; font-family: inherit; font-size: 13px; color: var(--ink); cursor: pointer; position: relative; padding: 0; }
+    .cal-day.empty { visibility: hidden; }
+    .cal-day:disabled { color: #d8cbbd; cursor: default; }
+    .cal-day:not(:disabled):not(.start):not(.end):not(.range):hover { background: var(--butter); border-radius: 999px; }
+    .cal-day.range { background: var(--peach); }
+    .cal-day.start, .cal-day.end { background: var(--coral); color: #fff; font-family: "Jua", sans-serif; }
+    .cal-day.start { border-radius: 999px 0 0 999px; }
+    .cal-day.end { border-radius: 0 999px 999px 0; }
+    .cal-day.start.end { border-radius: 999px; }
+    .cal-day.today:not(.start):not(.end)::after { content: ""; position: absolute; bottom: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--coral); }
+    .trip-sum { margin-top: 10px; background: var(--butter); border-radius: 12px; padding: 9px 12px; font-size: 13px; text-align: center; line-height: 1.5; }
+    .steppers { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stepper { display: flex; align-items: center; justify-content: space-between; background: #fffdf9; border: 2px solid var(--line); border-radius: 999px; padding: 4px; }
+    .st-name { font-size: 12px; color: var(--muted); padding-left: 10px; }
+    .stepper button { border: 0; background: var(--peach); color: var(--coral-d); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 1; }
+    .stepper button:hover { background: var(--coral); color: #fff; }
+    .stepper b { font-family: "Jua", sans-serif; font-weight: normal; font-size: 16px; min-width: 46px; text-align: center; }
+    .seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .seg button { border: 2px solid var(--line); background: #fffdf9; border-radius: 14px; padding: 8px 2px; font-family: inherit; font-size: 12px; color: var(--ink); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .seg button span { font-size: 20px; }
+    .seg button:hover { border-color: #f6c7ae; }
+    .seg button.on { background: var(--peach); border-color: var(--coral); color: var(--coral-d); font-family: "Jua", sans-serif; box-shadow: 0 2px 0 var(--coral); }
+    .switch-row { display: flex; align-items: center; gap: 10px; font-size: 13px; margin: 8px 0; cursor: pointer; }
+    .switch-row input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .sw { flex: none; width: 42px; height: 24px; border-radius: 999px; background: #eadccc; position: relative; transition: background .2s; }
+    .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); transition: transform .2s; }
+    .switch-row input:checked + .sw { background: var(--coral); }
+    .switch-row input:checked + .sw::after { transform: translateX(18px); }
+    .switch-row input:focus-visible + .sw { outline: 2px solid var(--coral-d); outline-offset: 2px; }
+    .switch-row small { color: var(--muted); }
+    .steppers.one { grid-template-columns: 1fr; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="section hero">
+        <h1>🧳 여행 동선 플래너</h1>
+        <p class="sub">가고 싶은 곳을 알려주면, 영업시간·식사 시간·이동 시간까지 따져서 알뜰한 일정을 짜 드려요 ✨</p>
+      </div>
+
+      <div class="section">
+        <h2>🗺️ 1. 어디로 떠나요?</h2>
+        <form class="row" id="regionForm">
+          <input type="text" id="regionInput" placeholder="예: 일본 도쿄, 프랑스 파리, 제주도" autocomplete="off">
+          <button type="submit">설정</button>
+        </form>
+        <div class="hint" id="regionHint"></div>
+      </div>
+
+      <div class="section">
+        <h2>🏨 2. 숙소 <span class="opt">(선택)</span></h2>
+        <form class="row" id="lodgingForm">
+          <input type="text" id="lodgingInput" placeholder="예: 신주쿠 그랜비아 호텔" autocomplete="off">
+          <button type="submit">설정</button>
+        </form>
+        <div class="hint">숙소를 정하면 매일 숙소에서 출발해 돌아오는 동선으로 짜요.</div>
+        <ul class="cands" id="lodgingCands"></ul>
+        <div id="lodgingCard"></div>
+      </div>
+
+      <div class="section">
+        <h2>📍 3. 가고 싶은 곳</h2>
+        <form class="row" id="placeForm">
+          <input type="text" id="placeInput" placeholder="예: 도쿄 타워, 신주쿠, 시부야" autocomplete="off">
+          <button type="submit">추가</button>
+        </form>
+        <div class="hint">여러 곳은 쉼표(,)로 구분해 한 번에 추가할 수 있어요.</div>
+        <div class="sugg-wrap" id="suggWrap">
+          <div class="hint">✨ 이런 곳은 어때요? 눌러서 담아 보세요</div>
+          <div class="sugg" id="sugg"></div>
+        </div>
+        <ul class="cands" id="cands"></ul>
+      </div>
+
+      <div class="section">
+        <h2>🎒 담은 장소 <span id="count"></span></h2>
+        <div class="cat-sum" id="catSum"></div>
+        <ul class="places" id="places"></ul>
+        <div class="empty" id="emptyMsg">아직 비어 있어요. 가고 싶은 곳을 담아 보세요 🐣 (최대 15곳)</div>
+        <div class="hint" id="listHint" style="display:none">체류 시간은 직접 고칠 수 있어요.</div>
+        <button class="link" id="clearBtn" style="display:none">모두 지우기</button>
+      </div>
+
+      <div class="section">
+        <h2>📅 4. 여행 시작일</h2>
+        <div class="cal" id="cal"></div>
+        <div class="trip-sum" id="tripSum"></div>
+        <input type="hidden" id="startDate">
+        <div class="field-label">🗓️ 여행 일수</div>
+        <div class="steppers one">
+          <div class="stepper">
+            <span class="st-name">기간</span>
+            <button type="button" data-t="days" data-d="-1" aria-label="하루 줄이기">−</button>
+            <b id="daysLabel">1일</b>
+            <button type="button" data-t="days" data-d="1" aria-label="하루 늘리기">+</button>
+          </div>
+        </div>
+        <input type="hidden" id="days" value="1">
+      </div>
+
+      <div class="section">
+        <h2>🎀 5. 여행 스타일</h2>
+        <div class="field-label">⏰ 하루 일과</div>
+        <div class="steppers">
+          <div class="stepper">
+            <span class="st-name">시작</span>
+            <button type="button" data-t="dayStart" data-d="-30" aria-label="시작 시각 30분 앞당기기">−</button>
+            <b id="dayStartLabel">09:00</b>
+            <button type="button" data-t="dayStart" data-d="30" aria-label="시작 시각 30분 늦추기">+</button>
+          </div>
+          <div class="stepper">
+            <span class="st-name">종료</span>
+            <button type="button" data-t="dayEnd" data-d="-30" aria-label="종료 시각 30분 앞당기기">−</button>
+            <b id="dayEndLabel">21:00</b>
+            <button type="button" data-t="dayEnd" data-d="30" aria-label="종료 시각 30분 늦추기">+</button>
+          </div>
+        </div>
+        <input type="hidden" id="dayStart" value="09:00">
+        <input type="hidden" id="dayEnd" value="21:00">
+
+        <div class="field-label">🧭 이동 수단</div>
+        <div class="seg" id="modeSeg">
+          <button type="button" data-v="DRIVING" class="on"><span>🚗</span>자동차</button>
+          <button type="button" data-v="TRANSIT"><span>🚇</span>대중교통</button>
+          <button type="button" data-v="WALKING"><span>🚶</span>도보</button>
+          <button type="button" data-v="BICYCLING"><span>🚲</span>자전거</button>
+        </div>
+        <input type="hidden" id="mode" value="DRIVING">
+
+        <div class="field-label">💡 옵션</div>
+        <label class="switch-row"><input type="checkbox" id="meals" checked><span class="sw"></span>점심·저녁 식사 시간에 식당 배치하기</label>
+        <label class="switch-row"><input type="checkbox" id="roundTrip" checked><span class="sw"></span><span>매일 숙소로 돌아오기 <small>(숙소를 정했을 때)</small></span></label>
+      </div>
+
+      <div class="section">
+        <button class="primary" id="planBtn" disabled>✨ 최적 일정 만들기</button>
+      </div>
+
+      <div class="section" id="result" style="display:none"></div>
+    </aside>
+    <div class="map-wrap">
+      <div id="map"></div>
+      <div class="banner" id="banner"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    'use strict';
+
+    // Google Maps API 키 (Maps JavaScript API, Places API (New), Routes API 활성화 필요)
+    // API 키는 config.js(깃에서 제외)에서 읽습니다. config.example.js를 복사해 만드세요.
+    const MAPS_API_KEY = window.MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY';
+
+    const MAP_STYLE = [
+      { featureType: 'all', elementType: 'labels.text', stylers: [{ color: '#878787' }] },
+      { featureType: 'all', elementType: 'labels.text.stroke', stylers: [{ visibility: 'off' }] },
+      { featureType: 'landscape', elementType: 'all', stylers: [{ color: '#f9f5ed' }] },
+      { featureType: 'road.highway', elementType: 'all', stylers: [{ color: '#f5f5f5' }] },
+      { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#c9c9c9' }] },
+      { featureType: 'water', elementType: 'all', stylers: [{ color: '#aee0f4' }] },
+    ];
+
+    const MAX_PLACES = 15;
+    const STORAGE_KEY = 'travel-planner-places-v2';
+    const REGION_KEY = 'travel-planner-region';
+    const PLACE_FIELDS = ['id', 'displayName', 'formattedAddress', 'location', 'types', 'rating', 'userRatingCount', 'regularOpeningHours'];
+    // 경로 데이터를 받지 못할 때 쓰는 추정 평균 속도(km/h)와 직선→실제 거리 보정 계수
+    const FALLBACK_SPEED = { DRIVING: 30, TRANSIT: 20, WALKING: 4.5, BICYCLING: 14 };
+    const DETOUR = 1.3;
+    const MODE_EMOJI = { DRIVING: '🚗', TRANSIT: '🚇', WALKING: '🚶', BICYCLING: '🚲' };
+    const DAY_COLORS = ['#ff8a65', '#5fb894', '#f2a93b', '#7b94f0', '#c777c9', '#4db6c6', '#e0707a'];
+    const BASE_COLOR = '#a47c5a';
+    const MEAL_WINDOWS = [[11 * 60 + 30, 14 * 60], [17 * 60 + 30, 20 * 60]];   // 점심, 저녁
+    // 일정 점수(분 단위 비용)의 가중치
+    const W = { wait: 0.6, overtime: 3, closed: 600, mealMiss: 0.8, balance: 0.004, emptyDay: 200 };
+
+    const els = {
+      regionForm: document.getElementById('regionForm'),
+      regionInput: document.getElementById('regionInput'),
+      regionHint: document.getElementById('regionHint'),
+      placeForm: document.getElementById('placeForm'),
+      placeInput: document.getElementById('placeInput'),
+      cands: document.getElementById('cands'),
+      places: document.getElementById('places'),
+      catSum: document.getElementById('catSum'),
+      suggWrap: document.getElementById('suggWrap'),
+      sugg: document.getElementById('sugg'),
+      count: document.getElementById('count'),
+      emptyMsg: document.getElementById('emptyMsg'),
+      listHint: document.getElementById('listHint'),
+      clearBtn: document.getElementById('clearBtn'),
+      startDate: document.getElementById('startDate'),
+      days: document.getElementById('days'),
+      dayStart: document.getElementById('dayStart'),
+      dayEnd: document.getElementById('dayEnd'),
+      mode: document.getElementById('mode'),
+      modeSeg: document.getElementById('modeSeg'),
+      cal: document.getElementById('cal'),
+      tripSum: document.getElementById('tripSum'),
+      lodgingForm: document.getElementById('lodgingForm'),
+      lodgingInput: document.getElementById('lodgingInput'),
+      lodgingCands: document.getElementById('lodgingCands'),
+      lodgingCard: document.getElementById('lodgingCard'),
+      meals: document.getElementById('meals'),
+      roundTrip: document.getElementById('roundTrip'),
+      planBtn: document.getElementById('planBtn'),
+      result: document.getElementById('result'),
+      banner: document.getElementById('banner'),
+    };
+
+    let map, Place, RouteLib, RouteMatrixLib;
+    let region = null;          // { name, viewport }
+    let selected = [];          // { id, name, address, loc, types, rating, periods, stay, isMeal, isBase, marker }
+    let routeLines = [];
+    let planToken = 0;
+
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    function fmtDur(min) {
+      const m = Math.max(0, Math.round(min));
+      const h = Math.floor(m / 60), r = m % 60;
+      return h ? (r ? `${h}시간 ${r}분` : `${h}시간`) : `${r}분`;
+    }
+    function fmtDist(m) { return m >= 1000 ? (m / 1000).toFixed(1) + 'km' : Math.round(m) + 'm'; }
+    function fmtClock(min) {
+      const t = Math.round(min);
+      const day = Math.floor(t / 1440), r = t % 1440;
+      const s = String(Math.floor(r / 60)).padStart(2, '0') + ':' + String(r % 60).padStart(2, '0');
+      return day ? `${s}(+${day}일)` : s;
+    }
+    function fmtDate(d) { return `${d.getMonth() + 1}월 ${d.getDate()}일(${'일월화수목금토'[d.getDay()]})`; }
+    function toMin(hhmm, fallback) {
+      const [h, m] = (hhmm || fallback).split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function straightM(a, b) {
+      const R = 6371000, rad = Math.PI / 180;
+      const dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
+      const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLng / 2) ** 2;
+      return 2 * R * Math.asin(Math.sqrt(h));
+    }
+
+    // ---------- 카테고리 ----------
+    // 순서가 곧 자동 분류의 우선순위이고, 목록의 카테고리 태그를 누르면 이 순서대로 바뀐다.
+    const CATS = {
+      sight:  { emoji: '🏛️', label: '관광명소', stay: 60 },
+      food:   { emoji: '🍽️', label: '맛집', stay: 60 },
+      cafe:   { emoji: '☕', label: '카페', stay: 45 },
+      museum: { emoji: '🖼️', label: '박물관·미술관', stay: 100 },
+      nature: { emoji: '🌳', label: '자연·공원', stay: 60 },
+      temple: { emoji: '⛩️', label: '사찰·신사', stay: 40 },
+      shop:   { emoji: '🛍️', label: '쇼핑', stay: 90 },
+      fun:    { emoji: '🎡', label: '놀거리', stay: 180 },
+      spa:    { emoji: '♨️', label: '온천·스파', stay: 90 },
+      etc:    { emoji: '📍', label: '기타', stay: 60 },
+    };
+
+    const TYPE_CAT = {
+      restaurant: 'food', meal_takeaway: 'food', food_court: 'food', bar: 'food',
+      cafe: 'cafe', coffee_shop: 'cafe', bakery: 'cafe', tea_house: 'cafe', dessert_shop: 'cafe', ice_cream_shop: 'cafe',
+      museum: 'museum', art_museum: 'museum', history_museum: 'museum', art_gallery: 'museum',
+      amusement_park: 'fun', theme_park: 'fun', zoo: 'fun', aquarium: 'fun', water_park: 'fun',
+      place_of_worship: 'temple', hindu_temple: 'temple', church: 'temple', shrine: 'temple', buddhist_temple: 'temple', mosque: 'temple', synagogue: 'temple',
+      park: 'nature', state_park: 'nature', national_park: 'nature', garden: 'nature', botanical_garden: 'nature', natural_feature: 'nature', beach: 'nature', hiking_area: 'nature',
+      shopping_mall: 'shop', department_store: 'shop', store: 'shop', market: 'shop', clothing_store: 'shop', supermarket: 'shop',
+      spa: 'spa', public_bath: 'spa',
+      tourist_attraction: 'sight', historical_landmark: 'sight', monument: 'sight', landmark: 'sight', cultural_landmark: 'sight', observation_deck: 'sight', castle: 'sight',
+    };
+
+    // Google이 장소 종류를 대표성이 높은 순서로 돌려주므로, 목록에서 처음 맞는 카테고리를 쓴다.
+    function catOf(types) {
+      for (const t of types) {
+        if (TYPE_CAT[t]) return TYPE_CAT[t];
+        if (t.endsWith('_restaurant')) return 'food';
+      }
+      return 'etc';
+    }
+
+    // 지도 핀: 날짜 색 원 안에 카테고리 이모지, 오른쪽 위에 방문 번호
+    function pinIcon(emoji, color, num) {
+      const badge = num === '' ? '' :
+        `<circle cx="37" cy="10" r="9" fill="#fff" stroke="${color}" stroke-width="2"/><text x="37" y="14.5" font-size="12" font-weight="bold" text-anchor="middle" fill="${color}" font-family="Arial, sans-serif">${num}</text>`;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><circle cx="22" cy="26" r="17" fill="${color}" stroke="#fff" stroke-width="3"/><text x="22" y="33" font-size="19" text-anchor="middle">${emoji}</text>${badge}</svg>`;
+      return { url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg), scaledSize: new google.maps.Size(40, 40), anchor: new google.maps.Point(18, 22) };
+    }
+    function pinFor(p, color, num) { return p.isBase ? pinIcon('🏨', BASE_COLOR, '') : pinIcon(CATS[p.cat].emoji, color, num); }
+
+    function toPlain(p) {
+      const hrs = p.regularOpeningHours;
+      const periods = hrs && hrs.periods && hrs.periods.length
+        ? hrs.periods.map(x => ({ o: [x.open.day, x.open.hour, x.open.minute], c: x.close ? [x.close.day, x.close.hour, x.close.minute] : null }))
+        : null;
+      return { id: p.id, name: p.displayName, address: p.formattedAddress, loc: p.location.toJSON(), types: p.types || [], rating: p.rating || null, ratingCount: p.userRatingCount || 0, periods };
+    }
+
+    // 해당 날짜의 영업 구간(분 단위). 정보가 없으면 null(상시 영업으로 간주)
+    function windowsFor(p, date) {
+      if (!p.periods) return null;
+      const d = date.getDay(), w = [];
+      for (const { o, c } of p.periods) {
+        if (!c) return [[0, 3000]];
+        const om = o[1] * 60 + o[2], cm = c[1] * 60 + c[2];
+        if (o[0] === d) {
+          const span = (c[0] - o[0] + 7) % 7;
+          w.push([om, cm + 1440 * (span || (cm <= om ? 1 : 0))]);
+        } else if ((o[0] + 1) % 7 === d && c[0] === d && (c[0] !== o[0])) {
+          w.push([0, cm]);
+        }
+      }
+      return w.sort((a, b) => a[0] - b[0]);
+    }
+
+    function mealDistance(s) {
+      return Math.min(...MEAL_WINDOWS.map(([a, b]) => (s < a ? a - s : s > b ? s - b : 0)));
+    }
+
+    // ---------- 초기화 ----------
+    async function initMap() {
+      const { Map } = await google.maps.importLibrary('maps');
+      ({ Place } = await google.maps.importLibrary('places'));
+      ({ Route: RouteLib, RouteMatrix: RouteMatrixLib } = await google.maps.importLibrary('routes'));
+      await google.maps.importLibrary('marker');
+
+      map = new Map(document.getElementById('map'), {
+        center: { lat: 37.5665, lng: 126.978 }, zoom: 11, styles: MAP_STYLE,
+        mapTypeControl: false, streetViewControl: false, fullscreenControl: true,
+      });
+
+      initTripControls();
+      els.lodgingForm.addEventListener('submit', (e) => { e.preventDefault(); searchLodging(els.lodgingInput.value); });
+
+      els.regionForm.addEventListener('submit', (e) => { e.preventDefault(); setRegion(els.regionInput.value.trim()); });
+      els.placeForm.addEventListener('submit', (e) => { e.preventDefault(); addByText(els.placeInput.value); });
+      els.clearBtn.addEventListener('click', () => { selected.forEach(p => p.marker.setMap(null)); selected = []; changed(true); });
+      ['meals', 'roundTrip'].forEach(k => els[k].addEventListener('change', clearResult));
+      els.planBtn.addEventListener('click', plan);
+
+      try {
+        const r = localStorage.getItem(REGION_KEY);
+        if (r) { els.regionInput.value = r; await setRegion(r, true); }
+      } catch (e) { /* 저장된 값 없음 */ }
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        saved.slice(0, MAX_PLACES).forEach(p => addPlace(p, true));
+        if (selected.length) fitAll();
+      } catch (e) { /* 저장된 값 없음 */ }
+    }
+
+    // ---------- 지역 설정 및 장소 검색 ----------
+    async function setRegion(text, quiet) {
+      if (!text) { region = null; els.regionHint.textContent = ''; return; }
+      els.regionHint.className = 'hint';
+      els.regionHint.textContent = '지역 찾는 중…';
+      try {
+        const { places } = await Place.searchByText({ textQuery: text, fields: ['displayName', 'formattedAddress', 'location', 'viewport'], maxResultCount: 1, language: 'ko' });
+        if (!places.length) throw new Error('not found');
+        const p = places[0];
+        region = { name: text, viewport: p.viewport };
+        loadSuggestions(text);
+        els.regionHint.textContent = `✓ ${p.displayName} (${p.formattedAddress || ''}) 기준으로 장소를 검색해요.`;
+        if (!quiet) { if (p.viewport) map.fitBounds(p.viewport); else { map.setCenter(p.location); map.setZoom(11); } }
+        try { localStorage.setItem(REGION_KEY, text); } catch (e) { /* 무시 */ }
+      } catch (e) {
+        region = null;
+        els.regionHint.className = 'hint err';
+        els.regionHint.textContent = '지역을 찾지 못했어요. 다른 이름으로 입력해 보세요.';
+      }
+    }
+
+    // 설정한 지역의 대표 관광지를 칩으로 추천한다.
+    let suggestions = [];
+    let suggToken = 0;
+
+    async function loadSuggestions(text) {
+      const token = ++suggToken;
+      els.suggWrap.style.display = 'none';
+      try {
+        const req = { textQuery: `${text} 대표 관광지`, includedType: 'tourist_attraction', fields: PLACE_FIELDS, maxResultCount: 20, language: 'ko' };
+        if (region && region.viewport) req.locationBias = region.viewport;
+        const { places } = await Place.searchByText(req);
+        if (token !== suggToken) return;
+        // 후기가 많은 곳(=유명한 곳)을 우선해 6곳만 보여준다.
+        suggestions = places.map(toPlain).sort((a, b) => b.ratingCount - a.ratingCount).slice(0, 6);
+      } catch (e) { suggestions = []; }
+      renderSuggestions();
+    }
+
+    function renderSuggestions() {
+      els.sugg.innerHTML = '';
+      els.suggWrap.style.display = suggestions.length ? 'block' : 'none';
+      suggestions.forEach(c => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.dataset.id = c.id;
+        const short = c.name.length > 14 ? c.name.slice(0, 13) + '…' : c.name;
+        b.textContent = `${CATS[catOf(c.types)].emoji} ${short}`;
+        b.title = c.name;
+        b.addEventListener('click', () => { if (!selected.some(s => s.id === c.id)) addPlace(c); });
+        els.sugg.appendChild(b);
+      });
+      refreshSuggestions();
+    }
+
+    function refreshSuggestions() {
+      els.sugg.querySelectorAll('button').forEach(b => b.classList.toggle('done', selected.some(s => s.id === b.dataset.id)));
+    }
+
+    async function searchOne(term, type) {
+      const req = { textQuery: term, fields: PLACE_FIELDS, maxResultCount: 5, language: 'ko' };
+      if (type) req.includedType = type;
+      if (region && region.viewport) req.locationBias = region.viewport;
+      const { places } = await Place.searchByText(req);
+      return places.map(toPlain);
+    }
+
+    async function addByText(raw) {
+      const terms = raw.split(/[,\n，、]/).map(t => t.trim()).filter(Boolean);
+      els.cands.innerHTML = '';
+      if (!terms.length) return;
+      if (!region) { els.regionHint.className = 'hint err'; els.regionHint.textContent = '여행 지역을 먼저 설정하면 더 정확하게 찾아요.'; }
+      try {
+        if (terms.length === 1) {
+          const found = await searchOne(terms[0]);
+          if (!found.length) { els.cands.innerHTML = '<li style="cursor:default">검색 결과가 없어요.</li>'; return; }
+          found.forEach(c => {
+            const li = document.createElement('li');
+            li.innerHTML = `<div class="n">${esc(c.name)}</div><div class="a">${esc(c.address)}</div>`;
+            li.addEventListener('click', () => { addPlace(c); els.cands.innerHTML = ''; els.placeInput.value = ''; els.placeInput.focus(); });
+            els.cands.appendChild(li);
+          });
+        } else {
+          const results = await Promise.all(terms.map(t => searchOne(t).catch(() => [])));
+          const missed = [];
+          results.forEach((r, i) => { if (r.length) addPlace(r[0], true); else missed.push(terms[i]); });
+          fitAll();
+          els.placeInput.value = missed.join(', ');
+          if (missed.length) els.cands.innerHTML = `<li style="cursor:default">찾지 못한 장소: ${esc(missed.join(', '))}</li>`;
+        }
+      } catch (e) {
+        console.error(e);
+        els.cands.innerHTML = '<li style="cursor:default">검색 중 오류가 났어요.</li>';
+      }
+    }
+
+    // ---------- 숙소 ----------
+    async function searchLodging(raw) {
+      const term = raw.trim();
+      els.lodgingCands.innerHTML = '';
+      if (!term) return;
+      try {
+        let found = await searchOne(term, 'lodging');
+        if (!found.length) found = await searchOne(term);
+        if (!found.length) { els.lodgingCands.innerHTML = '<li style="cursor:default">검색 결과가 없어요.</li>'; return; }
+        // 첫 번째 후보를 바로 숙소로 지정하고, 나머지는 바꿀 수 있게 목록으로 남긴다.
+        setLodging(found[0]);
+        els.lodgingInput.value = '';
+        found.slice(1).forEach(c => {
+          const li = document.createElement('li');
+          li.innerHTML = `<div class="n">${esc(c.name)}</div><div class="a">${esc(c.address)}</div>`;
+          li.addEventListener('click', () => { setLodging(c); els.lodgingCands.innerHTML = ''; });
+          els.lodgingCands.appendChild(li);
+        });
+        if (found.length > 1) els.lodgingCands.insertAdjacentHTML('afterbegin', '<li style="cursor:default;border:0;padding:0 2px;color:var(--muted)">다른 숙소를 원하면 눌러서 바꿔요</li>');
+      } catch (e) {
+        console.error(e);
+        els.lodgingCands.innerHTML = '<li style="cursor:default">검색 중 오류가 났어요.</li>';
+      }
+    }
+
+    function setLodging(c) {
+      selected.filter(s => s.isBase || s.id === c.id).forEach(s => { s.marker.setMap(null); selected.splice(selected.indexOf(s), 1); });
+      addPlace({ ...c, isBase: true }, true);
+      fitAll();
+    }
+
+    function renderLodging() {
+      const b = selected.find(p => p.isBase);
+      els.lodgingCard.innerHTML = b
+        ? `<div class="lodging-card"><span class="ic">🏨</span><div class="grow"><div class="n">${esc(b.name)}</div><div class="a">${esc(b.address)}</div></div><button type="button" class="x" aria-label="숙소 삭제">×</button></div>`
+        : '';
+      if (b) els.lodgingCard.querySelector('.x').addEventListener('click', () => removePlace(selected.indexOf(b)));
+    }
+
+    // ---------- 여행 시작일·시간·수단 선택 UI ----------
+    let calMonth = null;
+
+    function pad2(n) { return String(n).padStart(2, '0'); }
+    function toHHMM(min) { return pad2(Math.floor(min / 60)) + ':' + pad2(min % 60); }
+    function tripStartDate() {
+      const [y, m, d] = (els.startDate.value || '').split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function renderCal() {
+      const y = calMonth.getFullYear(), m = calMonth.getMonth();
+      const dim = new Date(y, m + 1, 0).getDate(), lead = new Date(y, m, 1).getDay();
+      const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const sel = tripStartDate().getTime();
+      let html = `<div class="cal-head"><button type="button" class="cal-nav" data-nav="-1" aria-label="이전 달">‹</button><span class="cal-title">${y}년 ${m + 1}월</span><button type="button" class="cal-nav" data-nav="1" aria-label="다음 달">›</button></div><div class="cal-grid">`;
+      for (const w of '일월화수목금토') html += `<span class="cal-dow">${w}</span>`;
+      for (let i = 0; i < lead; i++) html += '<span class="cal-day empty"></span>';
+      for (let day = 1; day <= dim; day++) {
+        const dt = new Date(y, m, day), ts = dt.getTime();
+        const cls = ['cal-day'];
+        if (ts === sel) cls.push('start', 'end');
+        if (ts === today.getTime()) cls.push('today');
+        html += `<button type="button" class="${cls.join(' ')}" data-ts="${ts}" ${ts < today.getTime() ? 'disabled' : ''}>${day}</button>`;
+      }
+      els.cal.innerHTML = html + '</div>';
+    }
+
+    function updateTripSum() {
+      const first = tripStartDate(), days = +els.days.value || 1;
+      const last = new Date(first.getFullYear(), first.getMonth(), first.getDate() + days - 1);
+      els.tripSum.innerHTML = days === 1
+        ? `🌷 <b>${fmtDate(first)}</b> 하루 여행`
+        : `🌷 <b>${fmtDate(first)}</b> ~ <b>${fmtDate(last)}</b> · ${days}일`;
+    }
+
+    function initTripControls() {
+      const t = new Date(); t.setDate(t.getDate() + 1);
+      els.startDate.value = `${t.getFullYear()}-${pad2(t.getMonth() + 1)}-${pad2(t.getDate())}`;
+      calMonth = new Date(t.getFullYear(), t.getMonth(), 1);
+      renderCal(); updateTripSum();
+
+      els.cal.addEventListener('click', (e) => {
+        const nav = e.target.closest('[data-nav]');
+        if (nav) { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + (+nav.dataset.nav), 1); renderCal(); return; }
+        const b = e.target.closest('.cal-day[data-ts]');
+        if (!b || b.disabled) return;
+        const d = new Date(+b.dataset.ts);
+        els.startDate.value = `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+        renderCal(); updateTripSum(); clearResult();
+      });
+
+      document.querySelectorAll('.stepper button').forEach(btn => btn.addEventListener('click', () => {
+        const id = btn.dataset.t, delta = +btn.dataset.d;
+        if (id === 'days') {
+          els.days.value = Math.max(1, Math.min(7, (+els.days.value || 1) + delta));
+          document.getElementById('daysLabel').textContent = els.days.value + '일';
+          updateTripSum();
+        } else {
+          const cur = toMin(els[id].value, '09:00');
+          const next = id === 'dayStart'
+            ? Math.max(0, Math.min(cur + delta, toMin(els.dayEnd.value, '21:00') - 60))
+            : Math.min(23 * 60 + 30, Math.max(cur + delta, toMin(els.dayStart.value, '09:00') + 60));
+          els[id].value = toHHMM(next);
+          document.getElementById(id + 'Label').textContent = toHHMM(next);
+        }
+        clearResult();
+      }));
+
+      els.modeSeg.addEventListener('click', (e) => {
+        const b = e.target.closest('button[data-v]');
+        if (!b) return;
+        els.mode.value = b.dataset.v;
+        els.modeSeg.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+        clearResult();
+      });
+    }
+
+    // ---------- 장소 관리 ----------
+    function addPlace(p, quiet) {
+      if (selected.some(s => s.id === p.id)) return;
+      if (!p.isBase && selected.filter(s => !s.isBase).length >= MAX_PLACES) { alert(`장소는 최대 ${MAX_PLACES}곳까지 추가할 수 있어요.`); return; }
+      const types = p.types || [];
+      const cat = CATS[p.cat] ? p.cat : catOf(types);
+      const marker = new google.maps.Marker({ position: p.loc, map, title: p.name });
+      selected.push({
+        id: p.id, name: p.name, address: p.address, loc: p.loc, types, rating: p.rating || null, periods: p.periods || null,
+        cat, stay: p.stay || CATS[cat].stay, isMeal: cat === 'food', isBase: !!p.isBase, marker,
+      });
+      changed(false);
+      if (!quiet) { selected.length === 1 ? (map.setCenter(p.loc), map.setZoom(14)) : fitAll(); }
+    }
+
+    function removePlace(i) {
+      selected[i].marker.setMap(null);
+      selected.splice(i, 1);
+      changed(false);
+    }
+
+    function fitAll() {
+      if (!selected.length) return;
+      const b = new google.maps.LatLngBounds();
+      selected.forEach(p => b.extend(p.loc));
+      map.fitBounds(b, 60);
+    }
+
+    function resetMarkers() {
+      let n = 0;
+      selected.forEach((p) => {
+        p.marker.setMap(map);
+        p.marker.setIcon(pinFor(p, DAY_COLORS[0], p.isBase ? '' : String(++n)));
+        p.marker.setLabel(null);
+      });
+    }
+
+    function clearResult() {
+      planToken++;
+      routeLines.forEach(l => l.setMap(null));
+      routeLines = [];
+      els.result.style.display = 'none';
+      els.result.innerHTML = '';
+      resetMarkers();
+    }
+
+    function tagsFor(p) {
+      const t = [`<button type="button" class="tag cat" data-cat title="누르면 분류를 바꿔요">${CATS[p.cat].emoji} ${CATS[p.cat].label}</button>`];
+      t.push(p.periods ? '<span class="tag gray">🕘 영업시간 반영</span>' : '<span class="tag gray">🕘 영업시간 정보 없음</span>');
+      if (p.rating) t.push(`<span class="tag gray">★ ${p.rating}</span>`);
+      return t.join('');
+    }
+
+    function changed(refit) {
+      clearResult();
+      els.places.innerHTML = '';
+      let n = 0;
+      selected.forEach((p, i) => {
+        if (p.isBase) return;
+        const li = document.createElement('li');
+        li.innerHTML =
+          `<span class="num">${++n}</span>` +
+          `<div class="grow"><div class="n">${CATS[p.cat].emoji} ${esc(p.name)}</div><div class="a">${esc(p.address)}</div><div class="tags">${tagsFor(p)}</div></div>` +
+          `<div class="stay-wrap"><input class="stay" type="number" min="10" max="600" step="5" value="${p.stay}" aria-label="체류 시간(분)">분</div>` +
+          `<button class="x" aria-label="삭제">×</button>`;
+        const stayEl = li.querySelector('.stay');
+        stayEl.addEventListener('change', () => { p.stay = Math.max(10, +stayEl.value || 60); p.stayEdited = true; stayEl.value = p.stay; clearResult(); saveState(); });
+        li.querySelector('[data-cat]').addEventListener('click', () => {
+          const keys = Object.keys(CATS);
+          p.cat = keys[(keys.indexOf(p.cat) + 1) % keys.length];
+          p.isMeal = p.cat === 'food';
+          if (!p.stayEdited) p.stay = CATS[p.cat].stay;
+          changed(false);
+        });
+        li.querySelector('.x').addEventListener('click', () => removePlace(i));
+        els.places.appendChild(li);
+      });
+      renderLodging();
+      refreshSuggestions();
+      const counts = {};
+      selected.filter(p => !p.isBase).forEach(p => { counts[p.cat] = (counts[p.cat] || 0) + 1; });
+      els.catSum.innerHTML = Object.keys(CATS).filter(k => counts[k]).map(k => `<span class="cat-chip">${CATS[k].emoji} ${CATS[k].label} ${counts[k]}</span>`).join('');
+      els.count.textContent = n ? `(${n})` : '';
+      els.emptyMsg.style.display = n ? 'none' : 'block';
+      els.listHint.style.display = n ? 'block' : 'none';
+      els.clearBtn.style.display = selected.length ? 'inline' : 'none';
+      els.planBtn.disabled = !(n >= 2 || (n >= 1 && selected.some(s => s.isBase)));
+      resetMarkers();
+      if (refit) fitAll();
+      saveState();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(selected.map(({ id, name, address, loc, types, rating, periods, stay, isBase, cat }) => ({ id, name, address, loc, types, rating, periods, stay, isBase, cat }))));
+      } catch (e) { /* 무시 */ }
+    }
+
+    // ---------- 이동 시간 행렬 ----------
+    function estimateMatrix(mode) {
+      const n = selected.length, speed = FALLBACK_SPEED[mode] * 1000 / 3600;
+      const dur = [], dist = [];
+      for (let i = 0; i < n; i++) {
+        dur.push([]); dist.push([]);
+        for (let j = 0; j < n; j++) {
+          const d = i === j ? 0 : straightM(selected[i].loc, selected[j].loc) * DETOUR;
+          dist[i].push(d); dur[i].push(d / speed);
+        }
+      }
+      return { dur, dist, estimated: true };
+    }
+
+    // 대중교통 경로는 출발 시각이 필요하므로 여행 첫날 시작 시각을 기준으로 한다.
+    function departureDate() {
+      const [y, mo, d] = (els.startDate.value || '').split('-').map(Number);
+      const dt = y ? new Date(y, mo - 1, d) : new Date(Date.now() + 86400000);
+      const m = toMin(els.dayStart.value, '09:00');
+      dt.setHours(Math.floor(m / 60), m % 60, 0, 0);
+      return dt;
+    }
+
+    async function getMatrix(mode) {
+      try {
+        const pts = selected.map(p => p.loc);
+        const { matrix } = await RouteMatrixLib.computeRouteMatrix({
+          origins: pts, destinations: pts, travelMode: mode,
+          ...(mode === 'TRANSIT' ? { departureTime: departureDate() } : {}),
+          fields: ['durationMillis', 'distanceMeters', 'condition'],
+        });
+        const n = pts.length, dur = [], dist = [];
+        for (let i = 0; i < n; i++) {
+          dur.push([]); dist.push([]);
+          for (let j = 0; j < n; j++) {
+            if (i === j) { dur[i].push(0); dist[i].push(0); continue; }
+            const it = matrix.rows[i].items[j];
+            if (!it || typeof it.durationMillis !== 'number') throw new Error('경로 없음');
+            dur[i].push(it.durationMillis / 1000); dist[i].push(it.distanceMeters);
+          }
+        }
+        return { dur, dist, estimated: false };
+      } catch (e) {
+        console.warn('경로 행렬을 받지 못해 추정값을 사용합니다:', e);
+        return estimateMatrix(mode);
+      }
+    }
+
+    // ---------- 일정 시뮬레이션과 점수 ----------
+    // 한 날의 방문 순서를 실제 시각 순서로 따라가며 이동·대기·영업시간·식사·초과 시간을 비용(분)으로 환산한다.
+    function simulate(order, di, cfg) {
+      const { M } = cfg;
+      let t = cfg.start, prev = cfg.base, cost = 0, travel = 0;
+      const stops = [];
+      for (const idx of order) {
+        const p = selected[idx];
+        const tr = prev === null ? 0 : M.dur[prev][idx] / 60;
+        const dist = prev === null ? 0 : M.dist[prev][idx];
+        t += tr; travel += tr; cost += tr;
+        const arrive = t;
+        const flags = [];
+        let startStay = arrive, wait = 0;
+        const wins = windowsFor(p, cfg.dates[di]);
+        if (wins) {
+          let ok = false;
+          for (const w of wins) {
+            const s = Math.max(arrive, w[0]);
+            if (s + p.stay <= w[1] + 0.01) { startStay = s; ok = true; break; }
+          }
+          if (ok) wait = startStay - arrive;
+          else { flags.push('closed'); cost += W.closed; }
+        } else flags.push('nohours');
+        if (wait > 0) { cost += wait * W.wait; flags.push('wait'); }
+        if (cfg.meals && p.isMeal) {
+          const miss = mealDistance(startStay);
+          if (miss > 0) { cost += miss * W.mealMiss; flags.push('mealoff'); } else flags.push('meal');
+        }
+        stops.push({ idx, arrive, start: startStay, end: startStay + p.stay, wait, travel: tr, dist, from: prev, flags });
+        t = startStay + p.stay;
+        prev = idx;
+      }
+      let returnLeg = null;
+      if (cfg.returnBase && cfg.base !== null && prev !== null && prev !== cfg.base) {
+        const tr = M.dur[prev][cfg.base] / 60;
+        returnLeg = { from: prev, to: cfg.base, travel: tr, dist: M.dist[prev][cfg.base], arrive: t + tr };
+        t += tr; travel += tr; cost += tr;
+      }
+      const overtime = Math.max(0, t - cfg.end);
+      cost += overtime * W.overtime;
+      return { cost, travel, finish: t, stops, returnLeg, overtime };
+    }
+
+    function permutations(arr, fn) {
+      const a = arr.slice(), n = a.length, c = new Array(n).fill(0);
+      fn(a);
+      let i = 0;
+      while (i < n) {
+        if (c[i] < i) {
+          const k = i % 2 ? c[i] : 0;
+          [a[k], a[i]] = [a[i], a[k]];
+          fn(a);
+          c[i]++; i = 0;
+        } else { c[i] = 0; i++; }
+      }
+    }
+
+    function nearestOrder(set, cfg) {
+      const left = set.slice(), out = [];
+      let cur = cfg.base;
+      if (cur === null) { cur = left.splice(0, 1)[0]; out.push(cur); }
+      while (left.length) {
+        let bi = 0, bd = Infinity;
+        left.forEach((x, i) => { const d = cfg.M.dur[cur][x]; if (d < bd) { bd = d; bi = i; } });
+        cur = left.splice(bi, 1)[0]; out.push(cur);
+      }
+      return out;
+    }
+
+    function bestOrder(set, di, cfg) {
+      const key = di + '|' + [...set].sort((a, b) => a - b).join(',');
+      if (cfg.cache.has(key)) return cfg.cache.get(key);
+      let best = null;
+      const consider = (ord) => {
+        const r = simulate(ord, di, cfg);
+        if (!best || r.cost < best.cost - 1e-9) best = { ...r, order: ord.slice() };
+      };
+      if (set.length === 0) best = { cost: 0, travel: 0, finish: cfg.start, stops: [], returnLeg: null, overtime: 0, order: [] };
+      else if (set.length <= 8) permutations(set, consider);
+      else {
+        // 장소가 많을 때는 여러 초기해에서 시작하는 지역 탐색(위치 이동)으로 근사한다.
+        const starts = [nearestOrder(set, cfg), set.slice(), set.slice().reverse()];
+        for (const s of starts) {
+          let ord = s.slice(), cur = simulate(ord, di, cfg).cost, improved = true;
+          while (improved) {
+            improved = false;
+            outer: for (let i = 0; i < ord.length; i++) {
+              for (let j = 0; j < ord.length; j++) {
+                if (i === j) continue;
+                const cand = ord.slice(); const [x] = cand.splice(i, 1); cand.splice(j, 0, x);
+                const c = simulate(cand, di, cfg).cost;
+                if (c < cur - 1e-9) { ord = cand; cur = c; improved = true; break outer; }
+              }
+            }
+          }
+          consider(ord);
+        }
+      }
+      cfg.cache.set(key, best);
+      return best;
+    }
+
+    // ---------- 날짜별 장소 배분 ----------
+    function clusterByLocation(idxs, k) {
+      if (k <= 1) return [idxs.slice()];
+      if (k >= idxs.length) return idxs.map(i => [i]);
+      const pt = i => selected[i].loc;
+      const mean = idxs.reduce((a, i) => ({ lat: a.lat + pt(i).lat / idxs.length, lng: a.lng + pt(i).lng / idxs.length }), { lat: 0, lng: 0 });
+      const far = (from) => idxs.reduce((b, i) => (straightM(pt(i), from) > straightM(pt(b), from) ? i : b), idxs[0]);
+      const cents = [pt(far(mean))];
+      while (cents.length < k) {
+        let bi = idxs[0], bd = -1;
+        idxs.forEach(i => { const d = Math.min(...cents.map(c => straightM(pt(i), c))); if (d > bd) { bd = d; bi = i; } });
+        cents.push(pt(bi));
+      }
+      let groups = [];
+      for (let it = 0; it < 12; it++) {
+        groups = cents.map(() => []);
+        idxs.forEach(i => {
+          let b = 0, bd = Infinity;
+          cents.forEach((c, ci) => { const d = straightM(pt(i), c); if (d < bd) { bd = d; b = ci; } });
+          groups[b].push(i);
+        });
+        groups.forEach((g, gi) => {
+          if (!g.length) return;
+          cents[gi] = { lat: g.reduce((a, i) => a + pt(i).lat, 0) / g.length, lng: g.reduce((a, i) => a + pt(i).lng, 0) / g.length };
+        });
+      }
+      // 빈 날이 생기면 가장 큰 날에서 한 곳을 옮긴다.
+      groups.forEach(g => {
+        if (g.length) return;
+        const big = groups.reduce((a, b) => (b.length > a.length ? b : a));
+        g.push(big.pop());
+      });
+      return groups;
+    }
+
+    function totalCost(groups, cfg) {
+      let sum = 0;
+      const loads = groups.map((g, d) => {
+        if (!g.length) { sum += W.emptyDay; return 0; }
+        const r = bestOrder(g, d, cfg);
+        sum += r.cost;
+        return r.travel + g.reduce((a, i) => a + selected[i].stay, 0);
+      });
+      const avg = loads.reduce((a, b) => a + b, 0) / loads.length;
+      sum += loads.reduce((a, l) => a + (l - avg) ** 2, 0) * W.balance;
+      return sum;
+    }
+
+    function optimizeDays(visit, cfg) {
+      let groups = clusterByLocation(visit, cfg.days);
+      while (groups.length < cfg.days) groups.push([]);
+      if (cfg.days === 1) return groups;
+      let cur = totalCost(groups, cfg);
+      for (let pass = 0; pass < 5; pass++) {
+        let improved = false;
+        for (let d1 = 0; d1 < groups.length; d1++) {
+          for (const i of groups[d1].slice()) {
+            for (let d2 = 0; d2 < groups.length; d2++) {
+              if (d1 === d2 || !groups[d1].includes(i)) continue;
+              const cand = groups.map(g => g.slice());
+              cand[d1] = cand[d1].filter(x => x !== i); cand[d2].push(i);
+              const c = totalCost(cand, cfg);
+              if (c < cur - 1e-6) { groups = cand; cur = c; improved = true; }
+            }
+          }
+        }
+        for (let d1 = 0; d1 < groups.length; d1++) {
+          for (let d2 = d1 + 1; d2 < groups.length; d2++) {
+            for (const i of groups[d1].slice()) {
+              for (const j of groups[d2].slice()) {
+                if (!groups[d1].includes(i) || !groups[d2].includes(j)) continue;
+                const cand = groups.map(g => g.slice());
+                cand[d1] = cand[d1].map(x => (x === i ? j : x)); cand[d2] = cand[d2].map(x => (x === j ? i : x));
+                const c = totalCost(cand, cfg);
+                if (c < cur - 1e-6) { groups = cand; cur = c; improved = true; }
+              }
+            }
+          }
+        }
+        if (!improved) break;
+      }
+      return groups;
+    }
+
+    // ---------- 계산 및 표시 ----------
+    async function plan() {
+      // 숙소 이름만 입력해 두고 지정하지 않았다면 첫 번째 검색 결과로 지정한다.
+      if (els.lodgingInput.value.trim() && !selected.some(p => p.isBase)) await searchLodging(els.lodgingInput.value);
+      const token = ++planToken;
+      els.planBtn.disabled = true;
+      els.planBtn.textContent = '🐾 열심히 일정 짜는 중…';
+      await new Promise(r => setTimeout(r, 30));
+
+      const mode = els.mode.value;
+      const M = await getMatrix(mode);
+      if (token !== planToken) return;
+
+      const baseIdx = selected.findIndex(p => p.isBase);
+      const visit = selected.map((_, i) => i).filter(i => !selected[i].isBase);
+      const [y, mo, d0] = (els.startDate.value || '').split('-').map(Number);
+      const first = y ? new Date(y, mo - 1, d0) : new Date(Date.now() + 86400000);
+      const days = Math.max(1, Math.min(+els.days.value || 1, visit.length));
+      const cfg = {
+        M, days, mode,
+        base: baseIdx >= 0 ? baseIdx : null,
+        returnBase: els.roundTrip.checked && baseIdx >= 0,
+        meals: els.meals.checked,
+        start: toMin(els.dayStart.value, '09:00'),
+        end: toMin(els.dayEnd.value, '21:00'),
+        dates: Array.from({ length: days }, (_, i) => new Date(first.getFullYear(), first.getMonth(), first.getDate() + i)),
+        cache: new Map(),
+      };
+
+      const groups = optimizeDays(visit, cfg).filter(g => g.length || cfg.days === 1);
+      const results = groups.map((g, d) => ({ ...bestOrder(g, d, cfg), day: d }));
+
+      // 비교용: 추가한 순서 그대로 날짜별로 나눠 방문했을 때
+      const chunk = Math.ceil(visit.length / results.length);
+      const naive = results.map((_, d) => simulate(visit.slice(d * chunk, (d + 1) * chunk), d, cfg));
+
+      if (token !== planToken) return;
+      render(results, naive, cfg);
+
+      els.planBtn.disabled = false;
+      els.planBtn.textContent = '✨ 최적 일정 만들기';
+      drawRoutes(results, cfg, M, token);
+    }
+
+    function countFlags(rs, flag) { return rs.reduce((a, r) => a + r.stops.filter(s => s.flags.includes(flag)).length, 0); }
+
+    function render(results, naive, cfg) {
+      const { M } = cfg;
+      const totTravel = results.reduce((a, r) => a + r.travel, 0);
+      const totWait = results.reduce((a, r) => a + r.stops.reduce((x, s) => x + s.wait, 0), 0);
+      const nvTravel = naive.reduce((a, r) => a + r.travel, 0);
+      const closed = countFlags(results, 'closed'), nvClosed = countFlags(naive, 'closed');
+      const mealPlaces = countFlags(results, 'meal') + countFlags(results, 'mealoff');
+      const mealOk = countFlags(results, 'meal'), nvMealOff = countFlags(naive, 'mealoff');
+      const noHours = countFlags(results, 'nohours');
+      const overtimeDays = results.filter(r => r.overtime > 0).length;
+
+      const bullets = [];
+      bullets.push(`🧭 총 이동 <b>${fmtDur(totTravel)}</b>` + (nvTravel > totTravel + 1 ? ` — 추가한 순서대로 갈 때보다 ${fmtDur(nvTravel - totTravel)} 절약` : ''));
+      bullets.push(closed === 0
+        ? `✅ 모든 장소를 영업시간 안에 방문해요` + (nvClosed ? ` (추가한 순서대로면 ${nvClosed}곳이 영업시간 밖)` : '')
+        : `⚠️ ${closed}곳은 영업시간과 맞지 않아요. 날짜나 장소를 바꿔 보세요.`);
+      if (cfg.meals && mealPlaces) bullets.push(`🍽️ 식당 ${mealPlaces}곳 중 ${mealOk}곳을 점심·저녁 시간대에 배치` + (nvMealOff ? ` (추가한 순서대로면 ${nvMealOff}곳이 식사 시간 어긋남)` : ''));
+      if (totWait > 0) bullets.push(`⏳ 개장 대기 시간 ${fmtDur(totWait)}`);
+      if (results.length > 1) bullets.push(`🗓️ 가까운 곳끼리 묶어 ${results.length}일로 나눴어요`);
+      if (noHours) bullets.push(`ℹ️ ${noHours}곳은 영업시간 정보가 없어 항상 열려 있다고 가정했어요`);
+      if (overtimeDays) bullets.push(`⚠️ ${overtimeDays}일은 하루 종료 시각을 넘겨요. 일수를 늘리거나 장소를 줄여 보세요.`);
+
+      let html = `<h2>🌟 추천 일정</h2><div class="summary"><ul class="bullets" style="margin:0">${bullets.map(b => `<li>${b}</li>`).join('')}</ul>` +
+        (M.estimated ? `<div class="note">※ 이 지역/수단은 실제 경로 정보를 받지 못해 직선거리 기반 추정 이동 시간을 썼어요.</div>` : '') + `</div>`;
+
+      results.forEach((r, k) => {
+        const color = DAY_COLORS[k % DAY_COLORS.length];
+        const names = r.order.map(i => selected[i].name);
+        html += `<div class="day-card"><div class="day-head" data-day="${k}"><span class="day-badge" style="background:${color}">Day ${k + 1}</span>` +
+          `<b>${fmtDate(cfg.dates[k])}</b><span class="day-meta">이동 ${fmtDur(r.travel)} · ${fmtClock(cfg.start)}~${fmtClock(r.finish)}</span></div>`;
+        if (r.overtime > 0) html += `<div class="day-warn">하루 종료(${fmtClock(cfg.end)})보다 ${fmtDur(r.overtime)} 늦게 끝나요.</div>`;
+        if (cfg.base !== null) html += `<div class="stop"><div class="rail"><span class="num" style="background:${BASE_COLOR}">🏨</span><span class="line"></span></div><div class="body"><div class="name">${esc(selected[cfg.base].name)}</div><div class="time">${fmtClock(cfg.start)} 출발</div></div></div>`;
+        r.stops.forEach((s, n) => {
+          const p = selected[s.idx];
+          const leg = (s.from !== null && s.travel > 0.05) ? `<div class="leg">${MODE_EMOJI[cfg.mode]} ${fmtDur(s.travel)} · ${fmtDist(s.dist)}</div>` : '';
+          const flagHtml = s.flags.map(f => ({
+            closed: '<div class="flag warn">⚠️ 영업시간과 맞지 않아요 (휴무일일 수 있어요)</div>',
+            wait: `<div class="flag info">⏳ 개장까지 ${fmtDur(s.wait)} 대기</div>`,
+            meal: '<div class="flag ok">🍽️ 식사 시간대에 맞춰 배치</div>',
+            mealoff: '<div class="flag warn">🍽️ 식사 시간대와 어긋나요</div>',
+            nohours: '<div class="flag info">ℹ️ 영업시간 정보 없음</div>',
+          }[f])).join('');
+          html += `<div class="stop"><div class="rail"><span class="num" style="background:${color}">${n + 1}</span>${(n < r.stops.length - 1 || r.returnLeg) ? '<span class="line"></span>' : ''}</div>` +
+            `<div class="body">${leg}<div class="name">${CATS[p.cat].emoji} ${esc(p.name)}</div>` +
+            `<div class="time">${fmtClock(s.start)} ~ ${fmtClock(s.end)} (${fmtDur(p.stay)})</div>${flagHtml}</div></div>`;
+        });
+        if (r.returnLeg) html += `<div class="stop"><div class="rail"><span class="num" style="background:${BASE_COLOR}">↩</span></div><div class="body"><div class="leg">${MODE_EMOJI[cfg.mode]} ${fmtDur(r.returnLeg.travel)} · ${fmtDist(r.returnLeg.dist)}</div><div class="name">숙소 복귀</div><div class="time">${fmtClock(r.returnLeg.arrive)} 도착</div></div></div>`;
+        html += `<div class="hint">${esc(names.join(' → '))}</div></div>`;
+      });
+
+      els.result.innerHTML = html;
+      els.result.style.display = 'block';
+      els.result.querySelectorAll('.day-head').forEach(h => h.addEventListener('click', () => {
+        const r = results[+h.dataset.day];
+        const b = new google.maps.LatLngBounds();
+        r.order.forEach(i => b.extend(selected[i].loc));
+        if (cfg.base !== null) b.extend(selected[cfg.base].loc);
+        map.fitBounds(b, 70);
+      }));
+
+      // 마커를 날짜 색과 방문 순서로 갱신
+      selected.forEach(p => p.marker.setMap(map));
+      results.forEach((r, k) => r.order.forEach((idx, n) => {
+        selected[idx].marker.setIcon(pinFor(selected[idx], DAY_COLORS[k % DAY_COLORS.length], String(n + 1)));
+        selected[idx].marker.setLabel(null);
+      }));
+      fitAll();
+    }
+
+    async function drawRoutes(results, cfg, M, token) {
+      routeLines.forEach(l => l.setMap(null));
+      routeLines = [];
+      const legs = [];
+      results.forEach((r, k) => {
+        const seq = [...(cfg.base !== null ? [cfg.base] : []), ...r.order, ...(cfg.returnBase ? [cfg.base] : [])];
+        for (let i = 0; i < seq.length - 1; i++) if (seq[i] !== seq[i + 1]) legs.push({ a: seq[i], b: seq[i + 1], color: DAY_COLORS[k % DAY_COLORS.length] });
+      });
+      const paths = await Promise.all(legs.map(async (l) => {
+        if (M.estimated) return null;
+        try {
+          const { routes } = await RouteLib.computeRoutes({
+            origin: selected[l.a].loc, destination: selected[l.b].loc, travelMode: cfg.mode,
+            ...(cfg.mode === 'TRANSIT' ? { departureTime: departureDate() } : {}),
+            fields: ['path'],
+          });
+          return routes && routes[0] && routes[0].path ? routes[0].path : null;
+        } catch (e) { return null; }
+      }));
+      if (token !== planToken) return;
+      legs.forEach((l, i) => {
+        const a = selected[l.a].loc, b = selected[l.b].loc;
+        routeLines.push(paths[i]
+          ? new google.maps.Polyline({ path: paths[i], map, strokeColor: l.color, strokeWeight: 5, strokeOpacity: 0.85 })
+          : new google.maps.Polyline({
+              path: [a, b], map, strokeOpacity: 0, strokeColor: l.color,
+              icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: 0.9, scale: 3 }, offset: '0', repeat: '14px' },
+                      { icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, scale: 3, fillColor: l.color, fillOpacity: 1, strokeColor: l.color, strokeWeight: 1 }, offset: '50%' }],
+            }));
+      });
+    }
+
+    function showBanner(html) { els.banner.innerHTML = html; els.banner.style.display = 'flex'; }
+
+    window.initMap = initMap;
+    window.gm_authFailure = () => showBanner('<div><b>Google Maps 인증 실패</b><br>API 키와 활성화된 API(Maps JavaScript, Places API (New), Routes), 허용 도메인을 확인하세요.</div>');
+
+    if (MAPS_API_KEY === 'YOUR_GOOGLE_MAPS_API_KEY') {
+      showBanner('<div><b>API 키가 필요합니다</b><br><code>MAPS_API_KEY</code>에 본인의 Google Maps API 키를 입력하세요.</div>');
+    } else {
+      const s = document.createElement('script');
+      s.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=initMap&loading=async&language=ko`;
+      s.async = true;
+      document.head.appendChild(s);
+    }
+  </script>
+</body>
+</html>
