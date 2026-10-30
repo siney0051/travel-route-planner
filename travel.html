@@ -5,46 +5,46 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <style>
     :root {
-      --bg: #fff8ef;
+      --bg: #f1f9f0;
       --card: #ffffff;
-      --ink: #5a4636;
-      --muted: #a08c7a;
-      --line: #f3e3d0;
-      --coral: #ff8a65;
-      --coral-d: #f06f48;
-      --peach: #ffe3d1;
-      --butter: #ffe9a8;
-      --mint: #cfeedd;
+      --ink: #2d4a3b;
+      --muted: #6f8b7d;
+      --line: #dcebdc;
+      --coral: #6dbf5b;
+      --coral-d: #3f8f3a;
+      --peach: #dff3d4;
+      --butter: #d6eefb;
+      --mint: #cfeaf7;
       --radius: 16px;
     }
-    html, body { height: 100%; margin: 0; font-family: "Gowun Dodum", "Malgun Gothic", sans-serif; color: var(--ink); background: var(--bg); }
-    h1, h2, .num, .primary, .summary b, .stop .name { font-family: "Jua", "Gowun Dodum", "Malgun Gothic", sans-serif; font-weight: normal; }
+    html, body { height: 100%; margin: 0; font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif; color: var(--ink); background: var(--bg); }
+    h1, h2, .num, .primary, .summary b, .stop .name { font-family: inherit; font-weight: 700; letter-spacing: -0.01em; }
     .app { display: flex; height: 100%; }
-    .sidebar { width: 410px; display: flex; flex-direction: column; background: var(--bg); z-index: 2; overflow-y: auto; padding: 14px; box-sizing: border-box; gap: 12px; box-shadow: 4px 0 18px rgba(160, 110, 70, .12); }
-    .section { background: var(--card); border-radius: var(--radius); padding: 14px 16px; box-shadow: 0 3px 0 var(--line), 0 6px 14px rgba(160, 110, 70, .08); }
-    .section.hero { background: linear-gradient(135deg, var(--peach), var(--butter)); box-shadow: 0 3px 0 #f6d3b3; }
+    .sidebar { width: 410px; display: flex; flex-direction: column; background: var(--bg); z-index: 2; overflow-y: auto; padding: 14px; box-sizing: border-box; gap: 12px; box-shadow: 4px 0 18px rgba(60, 110, 80, .12); }
+    .section { background: var(--card); border-radius: var(--radius); padding: 14px 16px; box-shadow: 0 3px 0 var(--line), 0 6px 14px rgba(60, 110, 80, .08); }
+    .section.hero { background: linear-gradient(135deg, var(--peach), var(--butter)); box-shadow: 0 3px 0 #c4e3b9; }
     .section h2 { font-size: 16px; margin: 0 0 10px; color: var(--coral-d); }
     h1 { font-size: 24px; margin: 0 0 4px; }
-    .sub { margin: 0; font-size: 14px; color: #8a6d57; line-height: 1.5; }
+    .sub { margin: 0; font-size: 14px; color: #56786a; line-height: 1.5; }
     .row { display: flex; gap: 8px; margin: 0; }
-    .row input { flex: 1; min-width: 0; padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--ink); border: 2px solid var(--line); border-radius: 999px; background: #fffdf9; outline: none; }
+    .row input { flex: 1; min-width: 0; padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--ink); border: 2px solid var(--line); border-radius: 999px; background: #fbfefb; outline: none; }
     .row input:focus, select:focus, input[type=time]:focus, input[type=number]:focus { border-color: var(--coral); }
-    .row button { padding: 0 18px; border: 0; border-radius: 999px; background: var(--coral); color: #fff; font-size: 14px; font-family: "Jua", inherit; cursor: pointer; box-shadow: 0 3px 0 var(--coral-d); }
+    .row button { padding: 0 18px; border: 0; border-radius: 999px; background: var(--coral); color: #fff; font-size: 14px; font-family: inherit; font-weight: 700; cursor: pointer; box-shadow: 0 3px 0 var(--coral-d); }
     .row button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--coral-d); }
     .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
     .hint.err { color: #d9534f; }
     .cands { list-style: none; margin: 10px 0 0; padding: 0; }
-    .cands li { padding: 10px 14px; border: 2px solid var(--line); border-radius: 14px; margin-bottom: 8px; cursor: pointer; font-size: 13px; background: #fffdf9; }
+    .cands li { padding: 10px 14px; border: 2px solid var(--line); border-radius: 14px; margin-bottom: 8px; cursor: pointer; font-size: 13px; background: #fbfefb; }
     .cands li:hover { background: var(--peach); border-color: var(--coral); }
     .cands .n { font-weight: bold; }
     .cands .a { color: var(--muted); font-size: 12px; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; }
     .grid label { display: flex; flex-direction: column; gap: 5px; color: var(--muted); }
     .grid .full { grid-column: 1 / -1; }
-    select, input[type=time], input[type=number] { padding: 9px 10px; font-size: 14px; font-family: inherit; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; background: #fffdf9; outline: none; }
+    select, input[type=time], input[type=number] { padding: 9px 10px; font-size: 14px; font-family: inherit; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; background: #fbfefb; outline: none; }
     .check { flex-direction: row !important; align-items: center; gap: 8px !important; color: var(--ink) !important; }
     .check input { accent-color: var(--coral); width: 18px; height: 18px; }
     .places { list-style: none; margin: 0; padding: 0; }
@@ -57,67 +57,67 @@
     .x { border: 0; background: var(--peach); width: 26px; height: 26px; border-radius: 50%; font-size: 16px; line-height: 1; color: var(--coral-d); cursor: pointer; }
     .x:hover { background: var(--coral); color: #fff; }
     .empty { font-size: 13px; color: var(--muted); padding: 4px 0; text-align: center; }
-    .primary { width: 100%; padding: 14px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #ff9a76, var(--coral-d)); color: #fff; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #d85a35, 0 8px 16px rgba(240, 111, 72, .3); }
-    .primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #d85a35; }
-    .primary:disabled { background: #ecdccb; color: #b9a592; box-shadow: 0 4px 0 #dcc9b5; cursor: default; }
+    .primary { width: 100%; padding: 14px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #86d072, var(--coral-d)); color: #fff; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #3c8a36, 0 8px 16px rgba(77, 164, 70, .3); }
+    .primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #3c8a36; }
+    .primary:disabled { background: #e0ebe2; color: #a9bdb1; box-shadow: 0 4px 0 #cddbd0; cursor: default; }
     .link { background: none; border: 0; color: var(--coral-d); font-size: 12px; cursor: pointer; padding: 6px 0 0; font-family: inherit; }
     .summary { background: var(--butter); border-radius: 14px; padding: 14px; font-size: 13px; line-height: 1.7; }
     .summary b { font-size: 18px; color: var(--coral-d); }
-    .note { font-size: 12px; color: #a0662a; margin-top: 8px; background: #fff5d6; border-radius: 10px; padding: 8px 10px; }
+    .note { font-size: 12px; color: #2f6f8f; margin-top: 8px; background: #e6f4fb; border-radius: 10px; padding: 8px 10px; }
     .stop { display: flex; gap: 10px; }
     .stop .rail { display: flex; flex-direction: column; align-items: center; }
-    .stop .rail .line { flex: 1; width: 0; border-left: 3px dotted #f0c7a8; margin: 3px 0; }
+    .stop .rail .line { flex: 1; width: 0; border-left: 3px dotted #bfe3b2; margin: 3px 0; }
     .stop .body { padding-bottom: 8px; flex: 1; min-width: 0; }
     .stop .name { font-size: 16px; }
     .stop .time { font-size: 12px; color: var(--muted); }
-    .leg { font-size: 12px; color: #4a8b6a; background: var(--mint); border-radius: 999px; padding: 4px 12px; margin: 8px 0; display: inline-block; }
+    .leg { font-size: 12px; color: #2f7fa6; background: var(--mint); border-radius: 999px; padding: 4px 12px; margin: 8px 0; display: inline-block; }
     .section a { color: var(--coral-d); }
     .map-wrap { flex: 1; position: relative; }
     #map { position: absolute; inset: 0; }
     .banner { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; background: var(--bg); z-index: 5; padding: 24px; line-height: 1.6; }
     @media (max-width: 760px) {
       .app { flex-direction: column-reverse; }
-      .sidebar { width: 100%; height: 58%; box-shadow: 0 -4px 18px rgba(160, 110, 70, .15); border-radius: 20px 20px 0 0; }
+      .sidebar { width: 100%; height: 58%; box-shadow: 0 -4px 18px rgba(60, 110, 80, .15); border-radius: 20px 20px 0 0; }
       .map-wrap { height: 42%; flex: none; }
     }
-    .places li.base { background: #fff5d6; border-radius: 12px; padding-left: 8px; padding-right: 8px; }
+    .places li.base { background: #e6f4fb; border-radius: 12px; padding-left: 8px; padding-right: 8px; }
     .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
-    .tag { font-size: 11px; background: var(--peach); color: #b0603c; border-radius: 999px; padding: 1px 8px; }
-    .tag.gray { background: #f1ebe4; color: var(--muted); }
+    .tag { font-size: 11px; background: var(--peach); color: #2f6b3a; border-radius: 999px; padding: 1px 8px; }
+    .tag.gray { background: #e8f0ea; color: var(--muted); }
     .stay { width: 54px; padding: 5px 6px !important; font-size: 12px !important; text-align: center; }
     .stay-wrap { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: var(--muted); gap: 2px; }
-    .base-btn { border: 0; background: #f1ebe4; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; filter: grayscale(1); opacity: .6; }
+    .base-btn { border: 0; background: #e8f0ea; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; filter: grayscale(1); opacity: .6; }
     .base-btn.on { background: var(--butter); filter: none; opacity: 1; }
     .grid.three { grid-template-columns: 1fr 1fr 1fr; }
     .bullets { margin: 10px 0 0; padding: 0; list-style: none; font-size: 13px; line-height: 1.6; }
-    .day-card { border: 2px solid var(--line); border-radius: 16px; padding: 12px; margin-top: 12px; background: #fffdf9; }
+    .day-card { border: 2px solid var(--line); border-radius: 16px; padding: 12px; margin-top: 12px; background: #fbfefb; }
     .day-head { display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 8px; flex-wrap: wrap; }
-    .day-badge { color: #fff; border-radius: 999px; padding: 2px 12px; font-family: "Jua", sans-serif; font-size: 14px; }
+    .day-badge { color: #fff; border-radius: 999px; padding: 2px 12px; font-family: inherit; font-weight: 700; font-size: 14px; }
     .day-meta { font-size: 12px; color: var(--muted); }
     .flag { font-size: 12px; margin-top: 3px; }
     .flag.warn { color: #c2410c; }
-    .flag.ok { color: #4a8b6a; }
+    .flag.ok { color: #2f7fa6; }
     .flag.info { color: var(--muted); }
     .day-warn { background: #ffe4dc; color: #b3411d; border-radius: 10px; padding: 6px 10px; font-size: 12px; margin-bottom: 8px; }
     .sugg-wrap { display: none; margin-top: 10px; }
     .sugg-wrap .hint { margin: 0 0 6px; }
     .sugg { display: flex; flex-wrap: wrap; gap: 6px; }
-    .sugg button { border: 2px solid #f6c7ae; background: #fff5ec; color: var(--ink); border-radius: 999px; padding: 6px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+    .sugg button { border: 2px solid #bfe3b2; background: #eef9ea; color: var(--ink); border-radius: 999px; padding: 6px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
     .sugg button:hover { background: var(--peach); border-color: var(--coral); }
-    .sugg button.done { opacity: .45; cursor: default; background: #f1ebe4; border-color: var(--line); }
+    .sugg button.done { opacity: .45; cursor: default; background: #e8f0ea; border-color: var(--line); }
     .cat-sum { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
     .cat-sum:empty { display: none; }
     .cat-chip { background: var(--butter); border-radius: 999px; padding: 3px 10px; font-size: 12px; }
-    button.tag.cat { border: 0; font-family: inherit; cursor: pointer; background: var(--butter); color: #8a5a1c; }
+    button.tag.cat { border: 0; font-family: inherit; cursor: pointer; background: var(--butter); color: #2f6b3a; }
     button.tag.cat:hover { background: var(--coral); color: #fff; }
-    .opt { font-size: 12px; color: var(--muted); font-family: "Gowun Dodum", sans-serif; }
-    .lodging-card { display: flex; align-items: center; gap: 10px; margin-top: 10px; background: #fff5d6; border-radius: 14px; padding: 10px 12px; }
+    .opt { font-size: 12px; color: var(--muted); font-family: inherit; }
+    .lodging-card { display: flex; align-items: center; gap: 10px; margin-top: 10px; background: #e6f4fb; border-radius: 14px; padding: 10px 12px; }
     .lodging-card .ic { font-size: 22px; }
     .field-label { font-size: 13px; color: var(--muted); margin: 14px 0 6px; }
     .field-label:first-of-type { margin-top: 0; }
     .cal { user-select: none; }
     .cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .cal-title { font-family: "Jua", sans-serif; font-size: 17px; }
+    .cal-title { font-family: inherit; font-weight: 700; font-size: 17px; }
     .cal-nav { border: 0; background: var(--peach); color: var(--coral-d); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 18px; line-height: 1; }
     .cal-nav:hover { background: var(--coral); color: #fff; }
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 4px; text-align: center; }
@@ -125,35 +125,52 @@
     .cal-dow:nth-child(1) { color: #e0707a; }
     .cal-day { border: 0; background: none; height: 34px; font-family: inherit; font-size: 13px; color: var(--ink); cursor: pointer; position: relative; padding: 0; }
     .cal-day.empty { visibility: hidden; }
-    .cal-day:disabled { color: #d8cbbd; cursor: default; }
+    .cal-day:disabled { color: #c3d3c8; cursor: default; }
     .cal-day:not(:disabled):not(.start):not(.end):not(.range):hover { background: var(--butter); border-radius: 999px; }
     .cal-day.range { background: var(--peach); }
-    .cal-day.start, .cal-day.end { background: var(--coral); color: #fff; font-family: "Jua", sans-serif; }
+    .cal-day.start, .cal-day.end { background: var(--coral); color: #fff; font-family: inherit; font-weight: 700; }
     .cal-day.start { border-radius: 999px 0 0 999px; }
     .cal-day.end { border-radius: 0 999px 999px 0; }
     .cal-day.start.end { border-radius: 999px; }
     .cal-day.today:not(.start):not(.end)::after { content: ""; position: absolute; bottom: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--coral); }
     .trip-sum { margin-top: 10px; background: var(--butter); border-radius: 12px; padding: 9px 12px; font-size: 13px; text-align: center; line-height: 1.5; }
     .steppers { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .stepper { display: flex; align-items: center; justify-content: space-between; background: #fffdf9; border: 2px solid var(--line); border-radius: 999px; padding: 4px; }
+    .stepper { display: flex; align-items: center; justify-content: space-between; background: #fbfefb; border: 2px solid var(--line); border-radius: 999px; padding: 4px; }
     .st-name { font-size: 12px; color: var(--muted); padding-left: 10px; }
     .stepper button { border: 0; background: var(--peach); color: var(--coral-d); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 1; }
     .stepper button:hover { background: var(--coral); color: #fff; }
-    .stepper b { font-family: "Jua", sans-serif; font-weight: normal; font-size: 16px; min-width: 46px; text-align: center; }
+    .stepper b { font-family: inherit; font-weight: 700; font-size: 16px; min-width: 46px; text-align: center; }
     .seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .seg button { border: 2px solid var(--line); background: #fffdf9; border-radius: 14px; padding: 8px 2px; font-family: inherit; font-size: 12px; color: var(--ink); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .seg button { border: 2px solid var(--line); background: #fbfefb; border-radius: 14px; padding: 8px 2px; font-family: inherit; font-size: 12px; color: var(--ink); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
     .seg button span { font-size: 20px; }
-    .seg button:hover { border-color: #f6c7ae; }
-    .seg button.on { background: var(--peach); border-color: var(--coral); color: var(--coral-d); font-family: "Jua", sans-serif; box-shadow: 0 2px 0 var(--coral); }
+    .seg button:hover { border-color: #bfe3b2; }
+    .seg button.on { background: var(--peach); border-color: var(--coral); color: var(--coral-d); font-family: inherit; font-weight: 700; box-shadow: 0 2px 0 var(--coral); }
     .switch-row { display: flex; align-items: center; gap: 10px; font-size: 13px; margin: 8px 0; cursor: pointer; }
     .switch-row input { position: absolute; opacity: 0; width: 0; height: 0; }
-    .sw { flex: none; width: 42px; height: 24px; border-radius: 999px; background: #eadccc; position: relative; transition: background .2s; }
+    .sw { flex: none; width: 42px; height: 24px; border-radius: 999px; background: #d9e6dc; position: relative; transition: background .2s; }
     .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); transition: transform .2s; }
     .switch-row input:checked + .sw { background: var(--coral); }
     .switch-row input:checked + .sw::after { transform: translateX(18px); }
     .switch-row input:focus-visible + .sw { outline: 2px solid var(--coral-d); outline-offset: 2px; }
     .switch-row small { color: var(--muted); }
     .steppers.one { grid-template-columns: 1fr; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .act { display: inline-flex; align-items: center; gap: 5px; border: 0; background: rgba(255, 255, 255, .78); color: var(--coral-d); border-radius: 999px; padding: 7px 12px; font-family: inherit; font-weight: 600; font-size: 12.5px; cursor: pointer; box-shadow: 0 1px 3px rgba(60, 110, 80, .18); }
+    .act:hover { background: #fff; }
+    .act.danger { color: #c2543a; }
+    .act svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    #toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 16px); background: #2d4a3b; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 30; max-width: 90vw; text-align: center; }
+    #toast.on { opacity: 1; transform: translate(-50%, 0); }
+    .hm { position: absolute; width: 0; height: 0; cursor: pointer; }
+    .hm-ill { position: absolute; left: -32px; top: -32px; width: 64px; height: 64px; transition: transform .15s; }
+    .hm-ill img { width: 64px; height: 64px; display: block; }
+    .hm:hover .hm-ill { transform: scale(1.12); }
+    .hm-num { position: absolute; right: -6px; top: -6px; min-width: 19px; height: 19px; border-radius: 10px; color: #fff; font-weight: 700; font-size: 11px; line-height: 15px; text-align: center; border: 2px solid #fff; box-sizing: border-box; padding: 0 3px; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
+    .hm-name { position: absolute; left: 38px; top: -11px; display: flex; align-items: center; gap: 5px; background: #fff; border-radius: 999px; padding: 3px 10px 3px 8px; font-size: 12px; font-weight: 600; color: var(--ink); white-space: nowrap; box-shadow: 0 2px 6px rgba(0, 0, 0, .2); max-width: 170px; }
+    .hm-name i { flex: none; width: 8px; height: 8px; border-radius: 50%; }
+    .hm-name .t { overflow: hidden; text-overflow: ellipsis; }
+    .hm:hover { z-index: 9999 !important; }
+    .hm:hover .hm-name { max-width: none; }
   </style>
 </head>
 <body>
@@ -162,6 +179,13 @@
       <div class="section hero">
         <h1>🧳 여행 동선 플래너</h1>
         <p class="sub">가고 싶은 곳을 알려주면, 영업시간·식사 시간·이동 시간까지 따져서 알뜰한 일정을 짜 드려요 ✨</p>
+        <div class="hero-actions">
+          <button type="button" class="act danger" id="resetBtn"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>초기화</button>
+          <button type="button" class="act" id="shareBtn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.6 6.8-4.2M8.6 13.4l6.8 4.2"/></svg>공유</button>
+          <button type="button" class="act" id="saveBtn"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>저장</button>
+          <button type="button" class="act" id="loadBtn"><svg viewBox="0 0 24 24"><path d="M12 15V3m0 0L8 7m4-4 4 4M4 17v3h16v-3"/></svg>불러오기</button>
+          <input type="file" id="loadFile" accept="application/json,.json" hidden>
+        </div>
       </div>
 
       <div class="section">
@@ -264,6 +288,7 @@
 
       <div class="section" id="result" style="display:none"></div>
     </aside>
+    <div id="toast" role="status" aria-live="polite"></div>
     <div class="map-wrap">
       <div id="map"></div>
       <div class="banner" id="banner"></div>
@@ -279,12 +304,38 @@
     const MAPS_API_KEY = window.MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY';
 
     const MAP_STYLE = [
-      { featureType: 'all', elementType: 'labels.text', stylers: [{ color: '#878787' }] },
-      { featureType: 'all', elementType: 'labels.text.stroke', stylers: [{ visibility: 'off' }] },
-      { featureType: 'landscape', elementType: 'all', stylers: [{ color: '#f9f5ed' }] },
-      { featureType: 'road.highway', elementType: 'all', stylers: [{ color: '#f5f5f5' }] },
-      { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#c9c9c9' }] },
-      { featureType: 'water', elementType: 'all', stylers: [{ color: '#aee0f4' }] },
+      // 바탕: 땅·물·공원 색만 남기고 나머지는 걷어낸다.
+      { featureType: 'landscape', elementType: 'all', stylers: [{ color: '#f7f4ec' }] },
+      { featureType: 'water', elementType: 'all', stylers: [{ color: '#b9e3f4' }] },
+      { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#dcefd0' }, { visibility: 'on' }] },
+      // 상점·식당·관광지·학교·병원 등 기본 장소 표시와 아이콘은 모두 숨긴다(우리 핀만 보이게).
+      { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] },
+      { featureType: 'poi.business', stylers: [{ visibility: 'off' }] },
+      { featureType: 'poi.government', stylers: [{ visibility: 'off' }] },
+      { featureType: 'poi.medical', stylers: [{ visibility: 'off' }] },
+      { featureType: 'poi.place_of_worship', stylers: [{ visibility: 'off' }] },
+      { featureType: 'poi.school', stylers: [{ visibility: 'off' }] },
+      { featureType: 'poi.sports_complex', stylers: [{ visibility: 'off' }] },
+      { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+      // 도로: 흰색 선만 남기고 작은 도로는 연하게, 도로명·번호·아이콘은 숨긴다.
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+      { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#e9e5db' }, { weight: 0.6 }] },
+      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#fff7df' }] },
+      { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#e8dcb8' }] },
+      { featureType: 'road.local', elementType: 'geometry', stylers: [{ color: '#fbfaf6' }] },
+      { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] },
+      // 글자: 구·시 단위 지명만 연한 회색으로 남기고 동네·건물 이름은 숨긴다.
+      { featureType: 'all', elementType: 'labels.text', stylers: [{ color: '#9aa8a0' }] },
+      { featureType: 'all', elementType: 'labels.text.stroke', stylers: [{ color: '#f7f4ec' }, { weight: 3 }] },
+      { featureType: 'administrative.neighborhood', stylers: [{ visibility: 'off' }] },
+      { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
+      { featureType: 'water', elementType: 'labels', stylers: [{ visibility: 'off' }] },
+      { featureType: 'landscape.man_made', elementType: 'labels', stylers: [{ visibility: 'off' }] },
+      // 주요 관광지만 아이콘과 이름을 다시 보여준다. 앞의 poi 숨김보다 뒤에 두어야 적용된다.
+      { featureType: 'poi.attraction', elementType: 'labels', stylers: [{ visibility: 'on' }] },
+      { featureType: 'poi.attraction', elementType: 'labels.text.fill', stylers: [{ color: '#4c6b5a' }] },
+      { featureType: 'poi.attraction', elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }, { weight: 1.5 }, { visibility: 'on' }] },
+      { featureType: 'poi.attraction', elementType: 'labels.icon', stylers: [{ color: '#5bb85b' }] },
     ];
 
     const MAX_PLACES = 15;
@@ -295,8 +346,8 @@
     const FALLBACK_SPEED = { DRIVING: 30, TRANSIT: 20, WALKING: 4.5, BICYCLING: 14 };
     const DETOUR = 1.3;
     const MODE_EMOJI = { DRIVING: '🚗', TRANSIT: '🚇', WALKING: '🚶', BICYCLING: '🚲' };
-    const DAY_COLORS = ['#ff8a65', '#5fb894', '#f2a93b', '#7b94f0', '#c777c9', '#4db6c6', '#e0707a'];
-    const BASE_COLOR = '#a47c5a';
+    const DAY_COLORS = ['#3fa9d8', '#6dbf5b', '#f2b84b', '#e98a7c', '#9b8be0', '#3fb7a5', '#e079a8'];
+    const BASE_COLOR = '#f0955f';
     const MEAL_WINDOWS = [[11 * 60 + 30, 14 * 60], [17 * 60 + 30, 20 * 60]];   // 점심, 저녁
     // 일정 점수(분 단위 비용)의 가중치
     const W = { wait: 0.6, overtime: 3, closed: 600, mealMiss: 0.8, balance: 0.004, emptyDay: 200 };
@@ -404,14 +455,59 @@
       return 'etc';
     }
 
-    // 지도 핀: 날짜 색 원 안에 카테고리 이모지, 오른쪽 위에 방문 번호
-    function pinIcon(emoji, color, num) {
-      const badge = num === '' ? '' :
-        `<circle cx="37" cy="10" r="9" fill="#fff" stroke="${color}" stroke-width="2"/><text x="37" y="14.5" font-size="12" font-weight="bold" text-anchor="middle" fill="${color}" font-family="Arial, sans-serif">${num}</text>`;
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><circle cx="22" cy="26" r="17" fill="${color}" stroke="#fff" stroke-width="3"/><text x="22" y="33" font-size="19" text-anchor="middle">${emoji}</text>${badge}</svg>`;
-      return { url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg), scaledSize: new google.maps.Size(40, 40), anchor: new google.maps.Point(18, 22) };
+    // ---------- 일러스트 지도 핀 ----------
+    // 종류별로 직접 그린 스티커 스타일 일러스트(64x64). 흰 원 위에 올려 스티커처럼 보이게 한다.
+    const ILLUST = {
+      sight: '<path d="M32 4 36 20 42 38 50 58H14L22 38 28 20Z" fill="#f4623a"/><path d="M29.4 20h5.2l1.6 6h-8.4zM24.6 38h14.8l1.9 6H22.7z" fill="#fff"/><rect x="18" y="56" width="28" height="4" rx="2" fill="#c9482a"/><path d="M32 0v6" stroke="#c9482a" stroke-width="2.5" stroke-linecap="round"/>',
+      temple: '<rect x="6" y="12" width="52" height="7" rx="3.5" fill="#2b2b2b"/><rect x="11" y="19" width="42" height="5" fill="#f4523a"/><rect x="17" y="24" width="7" height="34" fill="#f4523a"/><rect x="40" y="24" width="7" height="34" fill="#f4523a"/><rect x="12" y="32" width="40" height="5" fill="#e03b2c"/>',
+      food: '<path d="M8 30h48c0 14-10.7 24-24 24S8 44 8 30z" fill="#ef7b45"/><ellipse cx="32" cy="30" rx="24" ry="6" fill="#ffd98a"/><path d="M14 30c4-3 6 3 10 0s6 3 10 0 6 3 10 0" fill="none" stroke="#fff3c4" stroke-width="2.5" stroke-linecap="round"/><circle cx="42" cy="29" r="5" fill="#fff"/><circle cx="42" cy="29" r="2.4" fill="#ffb02e"/><path d="M46 4 31 27M53 7 38 28" stroke="#8b5a3c" stroke-width="3" stroke-linecap="round"/>',
+      cafe: '<path d="M10 26h36v10c0 10-7.5 17-18 17S10 46 10 36z" fill="#b87a4b"/><ellipse cx="28" cy="26" rx="18" ry="4.5" fill="#6b4226"/><path d="M46 30h4a7 7 0 0 1 0 14h-7" fill="none" stroke="#b87a4b" stroke-width="3.5" stroke-linecap="round"/><path d="M20 18c-3-4 3-6 0-11M28 18c-3-4 3-6 0-11M36 18c-3-4 3-6 0-11" fill="none" stroke="#9fb8c7" stroke-width="2.8" stroke-linecap="round"/><ellipse cx="28" cy="55" rx="21" ry="3" fill="#e3d6c6"/>',
+      museum: '<path d="M6 25 32 7l26 18z" fill="#8f7fe0"/><circle cx="32" cy="19" r="3.2" fill="#fff"/><g fill="#efeaff" stroke="#c9bff5" stroke-width="1.5"><rect x="11" y="28" width="7" height="22"/><rect x="22" y="28" width="7" height="22"/><rect x="35" y="28" width="7" height="22"/><rect x="46" y="28" width="7" height="22"/></g><rect x="6" y="50" width="52" height="7" rx="2" fill="#8f7fe0"/>',
+      nature: '<rect x="28.5" y="36" width="7" height="22" rx="2.5" fill="#9a6a45"/><circle cx="32" cy="23" r="17" fill="#5cb85c"/><circle cx="19" cy="37" r="12" fill="#4fa84f"/><circle cx="45" cy="37" r="12" fill="#6bc46b"/><circle cx="26" cy="18" r="5" fill="#8fdb8f" opacity=".7"/>',
+      shop: '<path d="M12 24h40l3.5 32h-47z" fill="#ef6fa0"/><path d="M22 24v-4a10 10 0 0 1 20 0v4" fill="none" stroke="#c2477a" stroke-width="4" stroke-linecap="round"/><circle cx="24" cy="32" r="2.6" fill="#fff"/><circle cx="40" cy="32" r="2.6" fill="#fff"/>',
+      fun: '<path d="M32 28 19 59M32 28 45 59" stroke="#7a8fa6" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="28" r="21" fill="none" stroke="#f2a93b" stroke-width="3.5"/><path d="M32 7v42M11 28h42M17 13l30 30M47 13 17 43" stroke="#f2a93b" stroke-width="2"/><circle cx="32" cy="28" r="4.5" fill="#e9573f"/><circle cx="32" cy="7" r="4" fill="#e9573f"/><circle cx="53" cy="28" r="4" fill="#3fa9d8"/><circle cx="32" cy="49" r="4" fill="#6dbf5b"/><circle cx="11" cy="28" r="4" fill="#9b8be0"/>',
+      spa: '<path d="M7 34h50c0 13-11 22-25 22S7 47 7 34z" fill="#58bde8"/><ellipse cx="32" cy="34" rx="25" ry="6" fill="#9be3f7"/><path d="M19 26c-3-4 3-6 0-11M32 26c-3-4 3-6 0-11M45 26c-3-4 3-6 0-11" fill="none" stroke="#b7c9d6" stroke-width="3.2" stroke-linecap="round"/>',
+      hotel: '<rect x="13" y="16" width="38" height="42" rx="3" fill="#f0955f"/><path d="M8 18 32 3l24 15z" fill="#d9703a"/><g fill="#fff6e8"><rect x="19" y="24" width="8" height="8" rx="1.5"/><rect x="37" y="24" width="8" height="8" rx="1.5"/><rect x="19" y="37" width="8" height="8" rx="1.5"/><rect x="37" y="37" width="8" height="8" rx="1.5"/></g><rect x="28" y="46" width="8" height="12" rx="1.5" fill="#8a4a24"/>',
+      etc: '<path d="M32 4c-11 0-18 7.5-18 17 0 13 18 35 18 35s18-22 18-35c0-9.500-7-17-18-17z" fill="#6dbf5b"/><circle cx="32" cy="21" r="7.5" fill="#fff"/>',
+    };
+    const illustCache = {};
+    function illustUrl(cat) {
+      if (!illustCache[cat]) {
+        const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 64 64"><defs><filter id="s" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.6" flood-color="#1b3a2a" flood-opacity=".3"/></filter></defs>' +
+          '<g filter="url(#s)"><circle cx="32" cy="31" r="28" fill="#fff"/><circle cx="32" cy="31" r="28" fill="none" stroke="#e4eee6" stroke-width="1.2"/>' +
+          `<g transform="translate(32 32) scale(.62) translate(-32 -31)">${ILLUST[cat] || ILLUST.etc}</g></g></svg>`;
+        illustCache[cat] = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+      }
+      return illustCache[cat];
     }
-    function pinFor(p, color, num) { return p.isBase ? pinIcon('🏨', BASE_COLOR, '') : pinIcon(CATS[p.cat].emoji, color, num); }
+
+    // 지도 위에 올리는 HTML 마커(일러스트 + 방문 번호 + 이름표)
+    let HtmlMarker = null;
+    function defineHtmlMarker() {
+      HtmlMarker = class extends google.maps.OverlayView {
+        constructor(latLng, el) { super(); this.latLng = latLng; this.el = el; }
+        onAdd() { this.getPanes().overlayMouseTarget.appendChild(this.el); }
+        draw() {
+          const pt = this.getProjection().fromLatLngToDivPixel(this.latLng);
+          if (pt) { this.el.style.left = pt.x + 'px'; this.el.style.top = pt.y + 'px'; }
+        }
+        onRemove() { this.el.remove(); }
+      };
+    }
+    function createPlaceMarker(loc) {
+      const el = document.createElement('div');
+      el.className = 'hm';
+      const overlay = new HtmlMarker(new google.maps.LatLng(loc.lat, loc.lng), el);
+      return {
+        setMap(m) { overlay.setMap(m); },
+        update(p, color, num) {
+          el.style.zIndex = p.isBase ? '1' : String(1000 - (+num || 0));
+          el.innerHTML =
+            `<div class="hm-ill"><img src="${illustUrl(p.isBase ? 'hotel' : p.cat)}" alt="">${num ? `<span class="hm-num" style="background:${color}">${num}</span>` : ''}</div>` +
+            `<div class="hm-name"><i style="background:${p.isBase ? BASE_COLOR : color}"></i><span class="t">${esc(p.name)}</span></div>`;
+        },
+      };
+    }
 
     function toPlain(p) {
       const hrs = p.regularOpeningHours;
@@ -454,7 +550,9 @@
         mapTypeControl: false, streetViewControl: false, fullscreenControl: true,
       });
 
+      defineHtmlMarker();
       initTripControls();
+      initHeaderActions();
       els.lodgingForm.addEventListener('submit', (e) => { e.preventDefault(); searchLodging(els.lodgingInput.value); });
 
       els.regionForm.addEventListener('submit', (e) => { e.preventDefault(); setRegion(els.regionInput.value.trim()); });
@@ -463,6 +561,11 @@
       ['meals', 'roundTrip'].forEach(k => els[k].addEventListener('change', clearResult));
       els.planBtn.addEventListener('click', plan);
 
+      // 공유 링크(#plan=...)로 열었다면 그 일정을 먼저 불러온다.
+      const shared = location.hash.match(/^#plan=(.+)$/);
+      if (shared) {
+        try { await applyState(decodeState(shared[1])); return; } catch (e) { console.warn('공유 링크를 읽지 못했어요', e); }
+      }
       try {
         const r = localStorage.getItem(REGION_KEY);
         if (r) { els.regionInput.value = r; await setRegion(r, true); }
@@ -568,6 +671,127 @@
         console.error(e);
         els.cands.innerHTML = '<li style="cursor:default">검색 중 오류가 났어요.</li>';
       }
+    }
+
+    // ---------- 초기화 · 공유 · 저장 ----------
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('on');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => t.classList.remove('on'), 2600);
+    }
+
+    function ymd(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+
+    // 장소는 id와 사용자가 바꾼 값(분류·체류 시간·숙소 여부)만 담아 링크를 짧게 유지한다.
+    function getState() {
+      return {
+        v: 1,
+        region: els.regionInput.value.trim(),
+        places: selected.map(p => ({ i: p.id, n: p.name, l: [p.loc.lat, p.loc.lng], c: p.cat, s: p.stay, b: p.isBase ? 1 : 0 })),
+        s: { start: els.startDate.value, days: els.days.value, dayStart: els.dayStart.value, dayEnd: els.dayEnd.value, mode: els.mode.value, meals: els.meals.checked, roundTrip: els.roundTrip.checked },
+      };
+    }
+
+    function encodeState(st) { return btoa(unescape(encodeURIComponent(JSON.stringify(st)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+    function decodeState(str) {
+      let b = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (b.length % 4) b += '=';
+      return JSON.parse(decodeURIComponent(escape(atob(b))));
+    }
+
+    function setSettings(s) {
+      const t = new Date(); t.setDate(t.getDate() + 1);
+      const v = { start: ymd(t), days: '1', dayStart: '09:00', dayEnd: '21:00', mode: 'DRIVING', meals: true, roundTrip: true, ...s };
+      els.startDate.value = v.start;
+      els.days.value = String(Math.max(1, Math.min(7, +v.days || 1)));
+      els.dayStart.value = v.dayStart; els.dayEnd.value = v.dayEnd;
+      document.getElementById('daysLabel').textContent = els.days.value + '일';
+      document.getElementById('dayStartLabel').textContent = v.dayStart;
+      document.getElementById('dayEndLabel').textContent = v.dayEnd;
+      els.mode.value = v.mode;
+      els.modeSeg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === v.mode));
+      els.meals.checked = !!v.meals; els.roundTrip.checked = !!v.roundTrip;
+      const d = tripStartDate();
+      calMonth = new Date(d.getFullYear(), d.getMonth(), 1);
+      renderCal(); updateTripSum();
+    }
+
+    async function applyState(st) {
+      selected.forEach(p => p.marker.setMap(null));
+      selected = [];
+      els.regionInput.value = st.region || '';
+      if (st.region) await setRegion(st.region, true);
+      else { region = null; els.regionHint.textContent = ''; suggestions = []; renderSuggestions(); }
+      setSettings(st.s || {});
+      const list = (st.places || []).slice(0, MAX_PLACES + 1);
+      const details = await Promise.all(list.map(async (q) => {
+        try {
+          const pl = new Place({ id: q.i, requestedLanguage: 'ko' });
+          await pl.fetchFields({ fields: PLACE_FIELDS });
+          return toPlain(pl);
+        } catch (e) { return null; }
+      }));
+      list.forEach((q, i) => {
+        const base = details[i] || { id: q.i, name: q.n, address: '', loc: { lat: q.l[0], lng: q.l[1] }, types: [], periods: null };
+        addPlace({ ...base, cat: q.c, stay: q.s, isBase: !!q.b }, true);
+      });
+      if (selected.length) fitAll();
+    }
+
+    async function shareLink() {
+      const url = location.href.split('#')[0] + '#plan=' + encodeState(getState());
+      try {
+        await navigator.clipboard.writeText(url);
+        toast(location.protocol === 'file:' ? '링크를 복사했어요. 웹에 올린 주소에서 열어야 다른 사람도 볼 수 있어요' : '공유 링크를 복사했어요 🔗');
+      } catch (e) {
+        window.prompt('아래 링크를 복사하세요', url);
+      }
+    }
+
+    function saveFile() {
+      const blob = new Blob([JSON.stringify(getState(), null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `여행일정-${ymd(new Date())}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      toast('일정을 파일로 저장했어요 💾');
+    }
+
+    function resetAll() {
+      if (!window.confirm('입력한 지역·장소·숙소와 일정을 모두 지우고 처음으로 돌아갈까요?')) return;
+      selected.forEach(p => p.marker.setMap(null));
+      selected = [];
+      region = null;
+      els.regionInput.value = ''; els.regionHint.textContent = '';
+      els.placeInput.value = ''; els.lodgingInput.value = '';
+      els.cands.innerHTML = ''; els.lodgingCands.innerHTML = '';
+      suggToken++; suggestions = []; renderSuggestions();
+      setSettings({});
+      changed(false);
+      try { localStorage.removeItem(REGION_KEY); } catch (e) { /* 무시 */ }
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      map.setCenter({ lat: 37.5665, lng: 126.978 }); map.setZoom(11);
+      toast('처음 상태로 돌렸어요 ↺');
+    }
+
+    function initHeaderActions() {
+      document.getElementById('resetBtn').addEventListener('click', resetAll);
+      document.getElementById('shareBtn').addEventListener('click', shareLink);
+      document.getElementById('saveBtn').addEventListener('click', saveFile);
+      const file = document.getElementById('loadFile');
+      document.getElementById('loadBtn').addEventListener('click', () => file.click());
+      file.addEventListener('change', async () => {
+        const f = file.files[0];
+        file.value = '';
+        if (!f) return;
+        try {
+          await applyState(JSON.parse(await f.text()));
+          toast('저장한 일정을 불러왔어요 📂');
+        } catch (e) { toast('파일을 읽지 못했어요. 이 앱에서 저장한 파일인지 확인해 주세요'); }
+      });
     }
 
     // ---------- 숙소 ----------
@@ -693,7 +917,7 @@
       if (!p.isBase && selected.filter(s => !s.isBase).length >= MAX_PLACES) { alert(`장소는 최대 ${MAX_PLACES}곳까지 추가할 수 있어요.`); return; }
       const types = p.types || [];
       const cat = CATS[p.cat] ? p.cat : catOf(types);
-      const marker = new google.maps.Marker({ position: p.loc, map, title: p.name });
+      const marker = createPlaceMarker(p.loc);
       selected.push({
         id: p.id, name: p.name, address: p.address, loc: p.loc, types, rating: p.rating || null, periods: p.periods || null,
         cat, stay: p.stay || CATS[cat].stay, isMeal: cat === 'food', isBase: !!p.isBase, marker,
@@ -719,8 +943,7 @@
       let n = 0;
       selected.forEach((p) => {
         p.marker.setMap(map);
-        p.marker.setIcon(pinFor(p, DAY_COLORS[0], p.isBase ? '' : String(++n)));
-        p.marker.setLabel(null);
+        p.marker.update(p, DAY_COLORS[0], p.isBase ? '' : String(++n));
       });
     }
 
@@ -1129,8 +1352,7 @@
       // 마커를 날짜 색과 방문 순서로 갱신
       selected.forEach(p => p.marker.setMap(map));
       results.forEach((r, k) => r.order.forEach((idx, n) => {
-        selected[idx].marker.setIcon(pinFor(selected[idx], DAY_COLORS[k % DAY_COLORS.length], String(n + 1)));
-        selected[idx].marker.setLabel(null);
+        selected[idx].marker.update(selected[idx], DAY_COLORS[k % DAY_COLORS.length], String(n + 1));
       }));
       fitAll();
     }
